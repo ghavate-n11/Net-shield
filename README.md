@@ -14,7 +14,7 @@ In today's digital world, cyber threats are constantly evolving. Most people and
 
 | Layer        | Technology                |
 |--------------|----------------------------|
-| **Frontend** | React.js, Bootstrap        |
+| **Frontend** | React.js                   |
 | **Backend**  | Spring Boot (Java)         |
 | **Database** | MySQL                      |
 | **Other**    | REST APIs, Maven, Git      |

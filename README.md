@@ -81,9 +81,9 @@ npm start
 
 ## 🤝 Contributors
 
-* 👨‍💻 **Nilesh Ghavate** – Full Stack Developer
-* 👨‍💻 **Swapnil Sambhaji Bhosale** – Development & Testing Support
-* 🎓 **Varnan Sir** – Project Guide & Technical Mentor
+* 👨‍💻 **Nilesh Ghavate** –  Java & Frontend Development
+* 👨‍💻 **Swapnil Sambhaji Bhosale** – Development & Testing Support & also Database
+* 🎓 **Varnan Sir** – Project Guide & Technical Mentor 
 
 ---
 

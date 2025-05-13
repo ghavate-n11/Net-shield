@@ -25,7 +25,6 @@ In today's digital world, cyber threats are constantly evolving. Most people and
 
 - 🔍 Real-Time Packet Monitoring
 - 🚨 Suspicious IP Address Detection
-- 📊 Live Logs with Search & Filter
 - 🛡️ Security Threat Pattern Analysis
 - 💾 Data Stored Securely in MySQL
 - 👤 User-friendly UI for Admin/Users
@@ -61,6 +60,9 @@ npm start
 
 * Frontend: `http://localhost:3000`
 * Backend API: `http://localhost:8080`
+*
+[IT WILL BE UPDATED SOON , CURRENTLY WORKING ON)
+* ]
 
 ---
 

@@ -50,7 +50,8 @@ git clone https://github.com/ghavate-n11/Netshild-.git
 ./mvnw spring-boot:run
 ```
 
-### 3. Setup Frontend (React)
+### 3. Setup Frontend (React)([IT WILL BE UPDATED SOON , CURRENTLY WORKING ON)
+* ])
 
 ```bash
 cd Netshild-
@@ -83,8 +84,7 @@ npm start
 
 ## 🤝 Contributors
 
-* 👨‍💻 **Nilesh Ghavate** –  Java & Frontend Development
-* 👨‍💻 **Swapnil Sambhaji Bhosale** – Development & Testing Support & also Database
+* 👨‍💻 **Nilesh Ghavate** –  Java & Frontend Develop
 * 🎓 **Varnan Sir** – Project Guide & Technical Mentor 
 
 ---

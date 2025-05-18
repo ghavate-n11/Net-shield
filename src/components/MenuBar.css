@@ -1,0 +1,83 @@
+/* Main Container */
+.menu-container {
+  position: relative;
+  width: 100%;
+  background-color: #0f172a; /* Deep navy background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Menu Bar */
+.menu-bar {
+  display: flex;
+  background-color: #1e293b; /* Slate blue */
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #334155;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Menu Items */
+.menu-item {
+  margin-right: 1.5rem;
+  color: #cbd5e1; /* Light gray-blue */
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background-color: #334155;
+  color: #60a5fa; /* Sky blue */
+}
+
+/* Submenu Styling */
+.submenu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  top: 3.3rem;
+  left: 1rem;
+  min-width: 220px;
+  z-index: 999;
+  padding: 0.5rem 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Submenu Items */
+.submenu-item {
+  padding: 0.6rem 1rem;
+  color: #e2e8f0; /* Light text */
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  font-size: 0.95rem;
+  border-radius: 4px;
+}
+
+.submenu-item:hover,
+.submenu-item.selected {
+  background-color: #334155;
+  color: #38bdf8; /* Bright cyan */
+}
+
+/* File Display Styling */
+.file-display {
+  margin: 1rem auto;
+  padding: 1rem;
+  max-width: 90%;
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  max-height: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

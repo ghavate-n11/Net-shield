@@ -1,203 +1,421 @@
-// src/pages/WelcomePage.jsx
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './WelcomePage.css';
+
+const INTERFACES = [
+  { name: 'Wi-Fi', icon: '📶' },
+  { name: 'Loopback', icon: '🖥️' },
+  { name: 'Ethernet 1', icon: '🔌' },
+  { name: 'Ethernet 2', icon: '🔌' },
+  { name: 'Virtual Adapter', icon: '💻' },
+];
+
+const VALID_PROTOCOLS = ['tcp', 'udp', 'icmp', 'arp', 'ip'];
 
 const WelcomePage = () => {
   const navigate = useNavigate();
-  const [filter, setFilter] = useState('');
-  const [selectedFileName, setSelectedFileName] = useState('');
-  const [selectedInterfaces, setSelectedInterfaces] = useState({});
+
+  const [packets, setPackets] = useState([]);
+  const [filterInput, setFilterInput] = useState('');
+  const [filterError, setFilterError] = useState('');
+  const [selectedInterfaces, setSelectedInterfaces] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [recentCaptures, setRecentCaptures] = useState([]);
-  const fileInputRef = useRef(null);
 
-  const interfaces = [
-    'Wi-Fi',
-    'Loopback Interface',
-    'Ethernet 1',
-    'Ethernet 2',
-    'Virtual Adapter',
-  ];
-
-  useEffect(() => {
-    const savedCaptures = JSON.parse(localStorage.getItem('recentCaptures')) || [];
-    setRecentCaptures(savedCaptures);
+  const signalStrengths = useMemo(() => {
+    const strengths = {};
+    INTERFACES.forEach(({ name }) => {
+      strengths[name] = Math.floor(Math.random() * 101);
+    });
+    return strengths;
   }, []);
 
-  const handleInterfaceChange = (iface) => {
-    setSelectedInterfaces((prev) => ({
-      ...prev,
-      [iface]: !prev[iface],
-    }));
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('recentCaptures')) || [];
+      setRecentCaptures(saved);
+    } catch {
+      setRecentCaptures([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    const protocols = VALID_PROTOCOLS;
+    const generatePacket = () => {
+      const protocol = protocols[Math.floor(Math.random() * protocols.length)];
+      return {
+        timestamp: new Date().toLocaleTimeString(),
+        protocol,
+        sourceIP: `192.168.0.${Math.floor(Math.random() * 255)}`,
+        destinationIP: `10.0.0.${Math.floor(Math.random() * 255)}`,
+      };
+    };
+
+    const interval = setInterval(() => {
+      setPackets((prev) => {
+        const newPackets = [generatePacket(), ...prev];
+        return newPackets.slice(0, 10);
+      });
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const toggleInterface = (iface) => {
+    setSelectedInterfaces((prev) =>
+      prev.includes(iface)
+        ? prev.filter((i) => i !== iface)
+        : [...prev, iface]
+    );
   };
 
-  // Optional: Simple protocol validation if filter is only protocol names
-  const validProtocols = ['tcp', 'udp', 'ip', 'icmp', 'arp'];
+  const isValidFilter = (filter) => {
+    if (!filter) return false;
+    const tokens = filter.toLowerCase().split(/\s+/);
+    const validTokens = [...VALID_PROTOCOLS, 'port', 'host', 'src', 'dst', 'and', 'or', 'not'];
+    return tokens.every((token) => validTokens.includes(token) || /^\d+$/.test(token));
+  };
 
-  const isValidFilter = (text) => {
-    if (!text.trim()) return true; // empty allowed
-    // If filter is one word and a valid protocol, allow
-    const words = text.trim().toLowerCase().split(/\s+/);
-    if (words.length === 1 && validProtocols.includes(words[0])) return true;
-    // Otherwise, allow any non-empty filter (you can improve this with real BPF validation)
-    return true;
+  const handleApplyFilter = () => {
+    const filter = filterInput.trim();
+
+    if (!filter) {
+      setFilterError('Please enter a filter');
+      return;
+    }
+    if (!isValidFilter(filter)) {
+      setFilterError('Please enter a correct protocol name or filter');
+      return;
+    }
+    setFilterError('');
+    navigate('/dashboard', { state: { filter, interfaces: selectedInterfaces } });
   };
 
   const handleStartCapture = () => {
-    if (!isValidFilter(filter)) {
-      alert('⚠️ Please enter a valid protocol name or filter.');
+    if (selectedInterfaces.length === 0) {
+      alert('Please select at least one interface');
+      return;
+    }
+    if (filterInput && !isValidFilter(filterInput.trim())) {
+      alert('Please enter a correct protocol name or filter');
       return;
     }
 
-    const activeInterfaces = Object.keys(selectedInterfaces).filter(
-      (iface) => selectedInterfaces[iface]
-    );
+    const filter = filterInput.trim();
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const fileName = `capture_${filter || 'all'}_${timestamp}.pcap`;
 
-    if (activeInterfaces.length === 0) {
-      alert('⚠️ Please select at least one network interface.');
-      return;
-    }
+    const newCapture = {
+      fileName,
+      filter,
+      interfaces: selectedInterfaces,
+      timestamp: new Date().toLocaleString(),
+    };
 
-    const newCapture = `${filter || 'capture'}_${new Date().toISOString()}.pcap`;
-    const updatedCaptures = [newCapture, ...recentCaptures.slice(0, 4)];
+    const updatedCaptures = [newCapture, ...recentCaptures].slice(0, 5);
     setRecentCaptures(updatedCaptures);
     localStorage.setItem('recentCaptures', JSON.stringify(updatedCaptures));
 
-    navigate('/dashboard', {
-      state: { filter, interfaces: activeInterfaces },
-    });
+    navigate('/dashboard', { state: { filter, interfaces: selectedInterfaces, fileName } });
   };
 
-  const handleOpenFile = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
-      setSelectedFileName(file.name);
+      const validExtensions = ['pcap', 'pcapng'];
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!validExtensions.includes(ext)) {
+        alert('Invalid file type. Please select a .pcap or .pcapng file.');
+        e.target.value = null;
+        setSelectedFile(null);
+        return;
+      }
+      setSelectedFile(file.name);
     }
   };
 
-  const renderSignalStrength = (iface) => {
-    const strength = Math.floor(Math.random() * 100);
-    return (
-      <span className="signal-strength" title={`${strength}%`}>
-        📶 {strength}%
-      </span>
-    );
-  };
-
   return (
-    <main className="welcome-page">
-      <header className="welcome-header">
-        <h1>🔒 Welcome to <span className="highlight">Net Shield</span></h1>
-        <p className="subtitle">
-          A simple and powerful tool for capturing and analyzing your network traffic.
-        </p>
-      </header>
+    <div
+      style={{
+        backgroundColor: '#121212',
+        color: '#e0e0e0',
+        minHeight: '100vh',
+        padding: '20px',
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      }}
+    >
+      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>
+        Net-Shield - Network Traffic Analyzer
+      </h1>
 
-      <section className="capture-section">
-        <h2>🎯 Start a New Capture</h2>
-        <label htmlFor="filter">Apply a filter (optional):</label>
+      <div
+        style={{
+          marginBottom: '15px',
+          fontWeight: 'bold',
+          fontSize: '1.1em',
+          animation: 'marquee 10s linear infinite',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          borderBottom: '1px solid #333',
+          paddingBottom: '10px',
+        }}
+      >
+        Your secure network shield — monitor live traffic and analyze with ease!
+      </div>
+
+      <section
+        aria-label="Live Network Traffic Simulation"
+        style={{
+          backgroundColor: '#222',
+          padding: '10px',
+          borderRadius: '8px',
+          marginBottom: '20px',
+          maxWidth: '700px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
+      >
+        <h2>Live Network Traffic</h2>
+        <table
+          style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            fontSize: '0.9em',
+          }}
+        >
+          <thead>
+            <tr style={{ borderBottom: '1px solid #444' }}>
+              <th style={{ padding: '8px', textAlign: 'left' }}>Timestamp</th>
+              <th style={{ padding: '8px', textAlign: 'left' }}>Protocol</th>
+              <th style={{ padding: '8px', textAlign: 'left' }}>Source IP</th>
+              <th style={{ padding: '8px', textAlign: 'left' }}>Destination IP</th>
+            </tr>
+          </thead>
+          <tbody>
+            {packets.length > 0 ? (
+              packets.map((p, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid #333' }}>
+                  <td style={{ padding: '6px' }}>{p.timestamp}</td>
+                  <td style={{ padding: '6px', textTransform: 'uppercase' }}>{p.protocol}</td>
+                  <td style={{ padding: '6px' }}>{p.sourceIP}</td>
+                  <td style={{ padding: '6px' }}>{p.destinationIP}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" style={{ padding: '8px', textAlign: 'center' }}>
+                  No traffic yet...
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </section>
+
+      <section
+        aria-label="Filter and Network Interface Selection"
+        style={{
+          maxWidth: '700px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          marginTop: '20px',
+          marginBottom: '20px',
+        }}
+      >
+        <h2>Filter Packets</h2>
         <input
           type="text"
-          id="filter"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="e.g., tcp port 80"
-          className="filter-input"
+          placeholder="Enter filter (e.g., tcp, udp, ip, port 80)"
+          value={filterInput}
+          onChange={(e) => {
+            setFilterInput(e.target.value);
+            if (filterError) setFilterError('');
+          }}
+          aria-describedby="filterError"
+          style={{
+            width: '100%',
+            padding: '8px',
+            borderRadius: '4px',
+            border: filterError ? '2px solid salmon' : '1px solid #555',
+            marginBottom: '6px',
+            backgroundColor: '#222',
+            color: '#eee',
+          }}
         />
-        <small className="hint">
-          Tip: Use BPF syntax (like <code>ip</code>, <code>tcp</code>, <code>udp</code>, <code>port 80</code>)
-        </small>
-
-        <div className="interface-list">
-          <p>Select interfaces to capture from:</p>
-          {interfaces.map((iface, idx) => (
-            <div key={idx} className="interface-item">
-              <input
-                type="checkbox"
-                id={`iface-${idx}`}
-                checked={!!selectedInterfaces[iface]}
-                onChange={() => handleInterfaceChange(iface)}
-              />
-              <label htmlFor={`iface-${idx}`}>{iface}</label>
-              {renderSignalStrength(iface)}
-            </div>
-          ))}
-        </div>
-
-        <div className="actions">
-          <button className="primary" onClick={handleStartCapture}>
-            ▶ Start Capture
+        {filterError && (
+          <p
+            id="filterError"
+            role="alert"
+            aria-live="assertive"
+            style={{ color: 'salmon', marginBottom: '8px' }}
+          >
+            {filterError}
+          </p>
+        )}
+        <button
+          onClick={handleApplyFilter}
+          style={{
+            backgroundColor: '#4caf50',
+            color: '#fff',
+            padding: '10px 15px',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            marginBottom: '15px',
+            width: '100%',
+            fontWeight: 'bold',
+        }}
+         aria-label="Apply filter and navigate to dashboard"
+>
+Apply Filter
+</button>
+    <h3>Select Interfaces</h3>
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '12px',
+        marginBottom: '20px',
+        justifyContent: 'center',
+      }}
+    >
+      {INTERFACES.map(({ name, icon }) => {
+        const isSelected = selectedInterfaces.includes(name);
+        return (
+          <button
+            key={name}
+            onClick={() => toggleInterface(name)}
+            aria-pressed={isSelected}
+            style={{
+              backgroundColor: isSelected ? '#1e88e5' : '#333',
+              color: isSelected ? '#fff' : '#ccc',
+              border: 'none',
+              padding: '10px 14px',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              minWidth: '100px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              fontSize: '0.9em',
+              userSelect: 'none',
+            }}
+          >
+            <span style={{ fontSize: '1.8em' }}>{icon}</span>
+            <span>{name}</span>
+            <small
+              style={{
+                marginTop: '4px',
+                fontSize: '0.75em',
+                color: '#a5d6f9',
+              }}
+            >
+              Signal: {signalStrengths[name]}%
+            </small>
           </button>
-          <button className="secondary" onClick={handleOpenFile}>
-            📂 Open a Capture File
-          </button>
-          <input
-            type="file"
-            accept=".pcap,.pcapng"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handleFileChange}
-          />
-          {selectedFileName && (
-            <p className="file-name">
-              ✅ Selected file: <strong>{selectedFileName}</strong>
-            </p>
-          )}
-        </div>
-      </section>
+        );
+      })}
+    </div>
 
-      <section className="recent-captures">
-        <h2>🕒 Recent Captures</h2>
-        <ul>
-          {recentCaptures.map((cap, idx) => (
-            <li key={idx}>{cap}</li>
-          ))}
-        </ul>
-      </section>
+    <button
+      onClick={handleStartCapture}
+      style={{
+        backgroundColor: '#00796b',
+        color: '#fff',
+        padding: '12px 18px',
+        border: 'none',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        width: '100%',
+        fontWeight: 'bold',
+        fontSize: '1em',
+      }}
+      aria-label="Start capturing packets with selected interfaces and filter"
+    >
+      Start Capture
+    </button>
+  </section>
 
-      <section className="learn-section">
-        <h2>📘 Learn & Support</h2>
-        <nav className="learn-links">
-          <a
-            href="https://docs.google.com/document/d/1dP_1R8nORHF93h0Z_4YJKpm-auunbWhDq4QHNJ2HdbI/edit?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
+  <section
+    aria-label="Open a saved capture file"
+    style={{
+      maxWidth: '700px',
+      margin: 'auto',
+      marginTop: '30px',
+      padding: '15px',
+      backgroundColor: '#222',
+      borderRadius: '8px',
+    }}
+  >
+    <h2>Open Saved Capture File</h2>
+    <input
+      type="file"
+      accept=".pcap,.pcapng"
+      onChange={handleFileChange}
+      aria-label="Select a capture file to open"
+      style={{
+        color: '#eee',
+        backgroundColor: '#333',
+        padding: '6px 10px',
+        borderRadius: '5px',
+        border: '1px solid #555',
+        width: '100%',
+      }}
+    />
+    {selectedFile && (
+      <p
+        style={{
+          marginTop: '10px',
+          color: '#a5d6f9',
+          fontWeight: 'bold',
+          wordBreak: 'break-word',
+        }}
+      >
+        Selected file: {selectedFile}
+      </p>
+    )}
+  </section>
+
+  <section
+    aria-label="Recent Capture Files"
+    style={{
+      maxWidth: '700px',
+      margin: '30px auto 40px',
+      color: '#aaa',
+    }}
+  >
+    <h2>Recent Capture Files</h2>
+    {recentCaptures.length === 0 ? (
+      <p>No recent capture files available.</p>
+    ) : (
+      <ul
+        style={{
+          listStyle: 'none',
+          padding: 0,
+          margin: 0,
+        }}
+      >
+        {recentCaptures.map(({ fileName, timestamp }, i) => (
+          <li
+            key={i}
+            style={{
+              backgroundColor: '#333',
+              marginBottom: '8px',
+              padding: '8px 12px',
+              borderRadius: '5px',
+              cursor: 'default',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
           >
-            User’s Guide
-          </a> •{' '}
-          <a
-            href="https://github.com/ghavate-n11/Net-shield.git"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </a> •{' '}
-          <a
-            href="https://docs.google.com/document/d/1xVkZjEjDv7S-QWot7paW6px58NPiT9Docv5f5XwON04/edit?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            FAQs
-          </a>
-        </nav>
-       <p className="contact">
-  <span className="contact-label">For all development queries, contact:</span><br />
-  <a href="mailto:nileshghavate11@gmail.com" target="_blank" rel="noopener noreferrer">
-    nileshghavate11@gmail.com
-  </a>
-</p>
-
-
-        <p className="version">
-          You are using <strong>Net Shield v1.0.0</strong>
-        </p>
-      </section>
-    </main>
-  );
+            <span>{fileName}</span>
+            <span style={{ fontSize: '0.8em', color: '#888' }}>{timestamp}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</div>
+);
 };
 
 export default WelcomePage;

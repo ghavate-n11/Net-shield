@@ -1,40 +1,104 @@
 package com.example.netshield.pcap;
 
 import org.pcap4j.core.*;
+import org.pcap4j.packet.Packet;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CaptureService {
 
-    public void startCapture() {
+    // List all available network interfaces as a String (for easier REST
+    // integration)
+    public String listAllDevices() {
+        StringBuilder sb = new StringBuilder();
         try {
-            // Get all network interfaces
             List<PcapNetworkInterface> devices = Pcaps.findAllDevs();
             if (devices == null || devices.isEmpty()) {
-                System.out.println("No devices found. Make sure Npcap is installed.");
-                return;
+                return "No devices found. Make sure Npcap is installed.";
             }
 
-            // Choose a network interface (e.g., Wi-Fi or Ethernet)
-            PcapNetworkInterface nif = devices.get(0); // Change index based on the correct interface
-            System.out.println("Capturing on: " + nif.getName() + " - " + nif.getDescription());
+            sb.append("Available Network Interfaces:\n");
+            for (int i = 0; i < devices.size(); i++) {
+                PcapNetworkInterface device = devices.get(i);
+                sb.append(i).append(": ").append(device.getName())
+                        .append(" (").append(device.getDescription()).append(")\n");
+            }
+        } catch (PcapNativeException e) {
+            return "Error finding devices: " + e.getMessage();
+        }
+        return sb.toString();
+    }
 
-            // Open the network interface for packet capture (in promiscuous mode)
-            PcapHandle handle = nif.openLive(
-                65536,  // Snapshot length (maximum packet size)
-                PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 
-                10  // Timeout (10ms)
-            );
+    // Capture packets on a network interface by index and return captured packet
+    // summaries as a List<String>
+    public List<String> startCapture(int interfaceIndex, int packetCount, int timeoutMillis) {
+        List<String> capturedPackets = new CopyOnWriteArrayList<>();
 
-            // Capture 10 packets and print their details
-            handle.loop(10, (PacketListener)packet -> {
-                System.out.println("Packet captured: " + packet);
-            });
+        try {
+            List<PcapNetworkInterface> devices = Pcaps.findAllDevs();
+            if (devices == null || devices.isEmpty()) {
+                capturedPackets.add("No devices found. Make sure Npcap is installed.");
+                return capturedPackets;
+            }
 
-            // Close the capture handle
-            handle.close();
+            if (interfaceIndex < 0 || interfaceIndex >= devices.size()) {
+                capturedPackets.add("Invalid interface index.");
+                return capturedPackets;
+            }
 
-        } catch (Exception e) {
+            PcapNetworkInterface nif = devices.get(interfaceIndex);
+            capturedPackets.add("Capturing on: " + nif.getName() + " - " + nif.getDescription());
+
+            try (PcapHandle handle = nif.openLive(
+                    65536,
+                    PcapNetworkInterface.PromiscuousMode.PROMISCUOUS,
+                    timeoutMillis)) {
+
+                // Loop to capture 'packetCount' packets
+                handle.loop(packetCount, (Packet packet) -> {
+                    String packetSummary = packet.toString();
+                    System.out.println("Packet captured: " + packetSummary);
+                    capturedPackets.add(packetSummary);
+                });
+
+            }
+
+        } catch (PcapNativeException | NotOpenException | InterruptedException e) {
+            capturedPackets.add("Error during capture: " + e.getMessage());
             e.printStackTrace();
         }
+
+        return capturedPackets;
+    }
+
+    // Run an nmap scan on the target (IP address or subnet) and return the output
+    // as a String
+    public String runNmapScan(String target) {
+        StringBuilder output = new StringBuilder();
+        try {
+            ProcessBuilder pb = new ProcessBuilder("nmap", "-sS", "-Pn", target);
+
+            Process process = pb.start();
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    output.append(line).append("\n");
+                }
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode != 0) {
+                output.append("Nmap scan exited with code ").append(exitCode);
+            }
+
+        } catch (Exception e) {
+            return "Error running nmap: " + e.getMessage();
+        }
+
+        return output.toString();
     }
 }

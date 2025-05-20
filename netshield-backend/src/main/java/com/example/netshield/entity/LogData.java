@@ -1,7 +1,5 @@
 package com.example.netshield.entity;
 
-
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +14,18 @@ public class LogData {
     private String protocol;
     private String status;
 
-    // Getters and Setters (Optional: Use Lombok if added)
+    // No-arg constructor (JPA requires this)
+    public LogData() {
+    }
+
+    // Parameterized constructor (optional)
+    public LogData(String ipAddress, String protocol, String status) {
+        this.ipAddress = ipAddress;
+        this.protocol = protocol;
+        this.status = status;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -47,5 +56,16 @@ public class LogData {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    // toString() method for debugging/logging
+    @Override
+    public String toString() {
+        return "LogData{" +
+                "id=" + id +
+                ", ipAddress='" + ipAddress + '\'' +
+                ", protocol='" + protocol + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

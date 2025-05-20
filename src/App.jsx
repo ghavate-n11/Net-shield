@@ -11,10 +11,13 @@ import Settings from './pages/Settings';
 import Logs from './pages/Logs';
 import CapturePage from './pages/CapturePage';
 import AboutPage from './pages/AboutPage';
+import NetworkScanner from './components/NetworkScanner';  // <-- Import added
 
 const Layout = () => {
   const location = useLocation();
-  const showMenuBar = location.pathname === '/dashboard';
+
+  // Show MenuBar only on '/dashboard' and '/network-scanner' for example
+  const showMenuBar = location.pathname === '/dashboard' || location.pathname === '/networkscanner';
 
   return (
     <>
@@ -28,6 +31,7 @@ const Layout = () => {
         <Route path="/logs" element={<Logs />} />
         <Route path="/capture" element={<CapturePage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/network-scanner" element={<NetworkScanner />} />  {/* <-- New Route */}
       </Routes>
       <Footer />
     </>

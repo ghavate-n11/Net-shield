@@ -145,7 +145,6 @@ const MenuBar = () => {
         setShowAbout(true);
         break;
       default:
-        // For Help menu external links
         if (menu.label === 'Help' && helpLinks[action]) {
           window.open(helpLinks[action], '_blank', 'noopener,noreferrer');
           return;
@@ -264,7 +263,8 @@ const MenuBar = () => {
               color: '#eee',
               padding: 20,
               borderRadius: 8,
-              maxWidth: 400,
+              maxWidth: 500,
+              lineHeight: 1.6,
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -293,26 +293,26 @@ coursework at SVERI's College of Engineering, Pandharpur.
 </p>
 
 
-<button
-onClick={() => setShowAbout(false)}
-style={{
-marginTop: 10,
-padding: '6px 12px',
-backgroundColor: '#444',
-color: '#eee',
-border: 'none',
-borderRadius: 4,
-cursor: 'pointer',
-}}
-autoFocus
->
-Close
-</button>
-</div>
-</div>
-)}
-</div>
-);
+
+            <button
+              style={{
+                marginTop: 15,
+                padding: '8px 12px',
+                backgroundColor: '#444',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 4,
+                cursor: 'pointer',
+              }}
+              onClick={() => setShowAbout(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default MenuBar;

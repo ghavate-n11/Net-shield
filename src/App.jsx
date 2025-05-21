@@ -7,7 +7,8 @@ import MenuBar from './components/MenuBar';
 
 import WelcomePage from './pages/WelcomePage';
 import Dashboard from './pages/Dashboard';
-import Alerts from './pages/Alerts';
+// import Alerts from './pages/Alerts'; // no longer needed
+import LiveAlerts from './pages/LiveAlerts'; // <-- points to ScanAlerts.jsx logic
 import Settings from './pages/Settings';
 import Logs from './pages/Logs';
 import CapturePage from './pages/CapturePage';
@@ -17,7 +18,7 @@ import NetworkScanner from './components/NetworkScanner';
 const Layout = () => {
   const location = useLocation();
 
-  // Fix: The route path should match exactly "/network-scanner" (not "networkscanner")
+  // Show MenuBar only on dashboard and network-scanner routes
   const showMenuBar = location.pathname === '/dashboard' || location.pathname === '/network-scanner';
 
   return (
@@ -27,7 +28,8 @@ const Layout = () => {
       <Routes>
         <Route path="/" element={<WelcomePage />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/alerts" element={<Alerts />} />
+        {/* Updated Alerts route to LiveAlerts */}
+        <Route path="/alerts" element={<LiveAlerts />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/logs" element={<Logs />} />
         <Route path="/capture" element={<CapturePage />} />

@@ -7,25 +7,33 @@ import jakarta.persistence.Id;
 
 @Entity
 public class LogData {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String ipAddress;
+
+    private Integer port;
+
     private String protocol;
+
     private String status;
 
-    // No-arg constructor (JPA requires this)
+    // No-arg constructor (required by JPA)
     public LogData() {
     }
 
     // Parameterized constructor (optional)
-    public LogData(String ipAddress, String protocol, String status) {
+    public LogData(String ipAddress, Integer port, String protocol, String status) {
         this.ipAddress = ipAddress;
+        this.port = port;
         this.protocol = protocol;
         this.status = status;
     }
 
     // Getters and Setters
+
     public Long getId() {
         return id;
     }
@@ -40,6 +48,14 @@ public class LogData {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
     }
 
     public String getProtocol() {
@@ -58,12 +74,12 @@ public class LogData {
         this.status = status;
     }
 
-    // toString() method for debugging/logging
     @Override
     public String toString() {
         return "LogData{" +
                 "id=" + id +
                 ", ipAddress='" + ipAddress + '\'' +
+                ", port=" + port +
                 ", protocol='" + protocol + '\'' +
                 ", status='" + status + '\'' +
                 '}';

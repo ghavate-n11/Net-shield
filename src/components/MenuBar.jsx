@@ -281,15 +281,14 @@ const MenuBar = () => {
 
 <h2>Technology Stack</h2>
 <ul style={{ fontSize: '16px', color: '#555' }}>
-  <li><strong>Backend:</strong> Spring Boot (Java) – Version 3.2</li>
-  <li><strong>Frontend:</strong> React.js – Version 18</li>
-  <li><strong>Database:</strong> MySQL – Version 8.0</li>
+  <li><strong>Backend:</strong> Spring Boot (Java) Version 3.2</li>
+  <li><strong>Frontend:</strong> React.js Version 18</li>
+  <li><strong>Database:</strong> MySQL Version 8.0</li>
 </ul>
 
 <h3>Developed By</h3>
 <p style={{ fontSize: '16px', color: '#999' }}>
-  <strong>Nilesh Ghavate</strong> as part of MCA
-coursework at SVERI's College of Engineering, Pandharpur.
+  <strong>Nilesh Ghavate</strong> 
 </p>
 
 

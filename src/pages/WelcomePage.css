@@ -1,40 +1,43 @@
 /* Main welcome page container */
 .welcome-page {
-  max-width: 900px;          /* slightly narrower for better focus */
-  margin: 2rem auto 2rem;    /* top and bottom 2rem, auto horizontal centering */
-  padding: 1.5rem 2rem;      /* balanced padding inside */
+  max-width: 900px;
+  margin: 2rem auto 2rem;
+  padding: 1.5rem 2rem;
   background-color: #0e0743;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(31, 210, 49, 0.6);
   transition: background-color 0.3s ease;
+  
+  color: white;  /* Set all font color inside this container to white */
 }
 
 /* Header */
 .welcome-header {
   text-align: center;
-  margin-bottom: 1.5rem;     /* reduced bottom margin */
+  margin-bottom: 1.5rem;
+  /* color inherited as white */
 }
 
 .welcome-header h1 {
-  font-size: 2.25rem;        /* slightly smaller for balance */
-  color: #0ebf72;
+  font-size: 2.25rem;
+  color: #23c556; /* keep your green highlight for header */
 }
 
 .welcome-header .highlight {
-  color: #14ee72;
+  color: #14ee72; /* keep highlight green */
 }
 
 .subtitle {
   font-size: 1rem;
-  color: #cbd5e1;
-  margin-top: 0.25rem;       /* tighter margin */
+  color: #cbd5e1; /* light gray is fine on dark bg */
+  margin-top: 0.25rem;
 }
 
 /* Section Titles */
 .capture-section h2,
 .recent-captures h2,
 .learn-section h2 {
-  color: #38bdf8;
+  color: #38bdf8; /* blue titles are good */
   margin-bottom: 0.4rem;
   border-bottom: 1px solid #334155;
   padding-bottom: 3px;
@@ -48,7 +51,8 @@ input[type="text"] {
   border-radius: 6px;
   border: 1px solid #334155;
   background-color: #0f172a;
-  color: #e2e8f0;
+
+  color: white;  /* Change input text color to white for visibility */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -61,7 +65,7 @@ input[type="text"]:focus {
 /* Disabled input */
 input[type="text"]:disabled {
   background-color: #1e293b;
-  color: #94a3b8;
+  color: #94a3b8; /* light gray disabled color */
   cursor: not-allowed;
 }
 
@@ -77,6 +81,8 @@ input[type="text"]:disabled {
   gap: 0.5rem;
   transition: background-color 0.3s ease;
   border-radius: 6px;
+
+  color: white;  /* make checkbox label text white */
 }
 
 .interface-item:hover {
@@ -93,7 +99,7 @@ input[type="text"]:disabled {
   align-items: center;
 }
 
-/* Example button styles (add your own classes accordingly) */
+/* Button styles remain the same since text is already white */
 button.primary {
   background-color: #00b4d8;
   border: none;
@@ -157,14 +163,14 @@ button:disabled {
   }
 }
 
-/* Smooth transitions for all interactive elements */
+/* Smooth transitions */
 button,
 input[type="text"],
 .interface-item {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Custom scrollbar for WebKit browsers */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -189,12 +195,13 @@ input[type="text"],
 .tooltip {
   position: relative;
   cursor: help;
+  color: white; /* tooltip text white */
 }
 
 .tooltip::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: 125%; /* above the element */
+  bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
   background-color: #2563eb;
@@ -225,24 +232,23 @@ input[type="text"],
 .marquee-container {
   width: 100%;
   overflow: hidden;
-  background-color: #e8e9e5; /* match welcome page background */
+  background-color: #e8e9e5;
   border-radius: 8px;
   padding: 0.5rem 0;
-  box-shadow: inset 0 0 8px #071fb8aa; /* subtle glow inside */
-  margin-bottom: 1.5rem; /* spacing below */
+  box-shadow: inset 0 0 8px #071fb8aa;
+  margin-bottom: 1.5rem;
 }
 
 .marquee-text {
   display: inline-block;
   white-space: nowrap;
-  color: #3331a9; /* bright blue text */
+  color: #3331a9;
   font-weight: 600;
   font-size: 1.2rem;
-  padding-left: 100%; /* start outside the container on the right */
+  padding-left: 100%;
   animation: marquee 12s linear infinite;
 }
 
-/* Keyframes for marquee scroll from right to left */
 @keyframes marquee {
   0% {
     transform: translateX(0%);
@@ -252,10 +258,9 @@ input[type="text"],
   }
 }
 
-/* Responsive tweaks for marquee */
-@media (max-width: 768px) {
+@media (max-width: 300px) {
   .marquee-text {
     font-size: 1rem;
-    animation-duration: 18s; /* slower on smaller screens */
+    animation-duration: 18s;
   }
 }

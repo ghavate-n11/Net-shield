@@ -34,7 +34,7 @@ const MenuBar = () => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const [showAbout, setShowAbout] = useState(false);
   const [capturing, setCapturing] = useState(false);
-  const [capturedData, setCapturedData] = useState(''); // Store captured packet info
+  const [capturedData, setCapturedData] = useState(''); // Keep this for saving captured data
 
   const fileInputRef = useRef(null);
   const menuBarRef = useRef(null);
@@ -241,27 +241,25 @@ const MenuBar = () => {
                   top: '100%',
                   left: 0,
                   backgroundColor: '#333',
-                  borderRadius: '4px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.8)',
+                  border: '1px solid #555',
+                  minWidth: '160px',
                   zIndex: 1000,
-                  minWidth: 150,
                 }}
               >
-                {menu.submenu.map((item, subIdx) => (
+                {menu.submenu.map((subItem, subIdx) => (
                   <li
-                    key={item}
+                    key={subItem}
                     role="menuitem"
                     tabIndex={focusedSubIndex === subIdx ? 0 : -1}
                     onClick={() => handleMenuAction(idx, subIdx)}
                     onMouseEnter={() => setFocusedSubIndex(subIdx)}
                     style={{
-                      padding: '6px 15px',
-                      backgroundColor: focusedSubIndex === subIdx ? '#666' : 'transparent',
+                      padding: '5px 20px',
+                      backgroundColor: focusedSubIndex === subIdx ? '#555' : 'transparent',
                       cursor: 'pointer',
-                      userSelect: 'none',
                     }}
                   >
-                    {item}
+                    {subItem}
                   </li>
                 ))}
               </ul>
@@ -270,84 +268,41 @@ const MenuBar = () => {
         ))}
       </div>
 
-      {/* File Picker */}
+      {/* Hidden file input */}
       <input
         type="file"
         ref={fileInputRef}
         style={{ display: 'none' }}
-        onChange={(e) => alert(`File selected: ${e.target.files[0]?.name}`)}
+        onChange={(e) => alert(`Selected file: ${e.target.files[0]?.name}`)}
       />
 
-      {/* About Modal */}
+      {/* About Dialog */}
       {showAbout && (
         <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2000,
-          }}
-          onClick={() => setShowAbout(false)}
           role="dialog"
           aria-modal="true"
-          aria-labelledby="aboutTitle"
+          aria-labelledby="about-title"
+          style={{
+            position: 'fixed',
+            top: '30%',
+            left: '50%',
+            transform: 'translate(-50%, -30%)',
+            backgroundColor: '#fff',
+            padding: 20,
+            borderRadius: 8,
+            boxShadow: '0 2px 10px rgba(0,0,0,0.5)',
+            zIndex: 1500,
+            width: '300px',
+            color: '#000',
+          }}
         >
-          <div
-            style={{
-              backgroundColor: '#fff',
-              padding: 20,
-              borderRadius: 8,
-              maxWidth: 400,
-              boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-              textAlign: 'center',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 id="aboutTitle">About Net Shield</h2>
-            <p>
-              Version 1.0.0<br />
-              Developed by Nilesh Ghavate
-            </p>
-            <button onClick={() => setShowAbout(false)}>Close</button>
-          </div>
+          <h2 id="about-title">About NetShield</h2>
+          <p>Version: 1.0.0</p>
+          <p>Author: Nilesh Ghavate</p>
+          <p>NetShield is a network packet capturing tool.</p>
+          <button onClick={() => setShowAbout(false)}>Close</button>
         </div>
       )}
-
-      {/* Display Zoom Level */}
-      <div style={{ marginTop: 20, paddingLeft: 10, color: '#333' }}>
-        <strong>Zoom Level:</strong> {(zoomLevel * 100).toFixed(0)}%
-      </div>
-
-      {/* Display Capture Status */}
-      <div style={{ marginTop: 10, paddingLeft: 10, color: capturing ? 'green' : 'red' }}>
-        <strong>Capture Status:</strong> {capturing ? 'Running' : 'Stopped'}
-      </div>
-
-      {/* Display captured data preview */}
-      <textarea
-        readOnly
-        value={capturedData}
-        rows={10}
-        style={{
-          width: '95%',
-          margin: '20px auto',
-          display: 'block',
-          backgroundColor: '#f4f4f4',
-          padding: 10,
-          fontFamily: 'monospace',
-          fontSize: 12,
-          borderRadius: 4,
-          border: '1px solid #ccc',
-          resize: 'vertical',
-        }}
-        placeholder="Captured packets will appear here..."
-      />
     </div>
   );
 };

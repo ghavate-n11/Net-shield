@@ -274,35 +274,64 @@ const MenuBar = () => {
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={(e) => alert(`Selected file: ${e.target.files[0]?.name}`)}
-      />
+      />{/* About Dialog */}
+{showAbout && (
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="about-title"
+    style={{
+      position: 'fixed',
+      top: '30%',
+      left: '50%',
+      transform: 'translate(-50%, -30%)',
+      backgroundColor: '#fff',
+      padding: 20,
+      borderRadius: 8,
+      boxShadow: '0 2px 10px rgba(0,0,0,0.5)',
+      zIndex: 1500,
+      width: '350px',
+      color: '#000',
+      fontFamily: 'Arial, sans-serif',
+      lineHeight: 1.5,
+    }}
+  >
+    <h2 id="about-title" style={{ marginBottom: '10px' }}>About Net Shield</h2>
+    <p><strong>Version:</strong> 1.0.0</p>
+    <p><strong>Developed By: Nilesh Ghavate (MCA)</strong> </p>
+    <p><strong>Project Purpose:</strong> Net Shield is a Web based  network packet capturing tool designed to help users monitor and analyze network traffic for troubleshooting and security auditing.</p>
+    <p><strong>Key Features:</strong></p>
+    <ul style={{ paddingLeft: '20px', marginTop: '5px', marginBottom: '10px' }}>
+      <li>Capture and display real-time network packets.</li>
+      <li>Start and stop capturing sessions easily.</li>
+      <li>Save captured data for offline analysis.</li>
+      <li>User-friendly interface with zoom functionality.</li>
+    </ul>
+   <p><strong>Technologies Used:</strong></p>
+<ul style={{ paddingLeft: '20px', marginTop: '5px', marginBottom: '15px' }}>
+  <li>React.js for frontend UI development.</li>
+  <li>Spring Boot (Java framework) for backend APIs and logic.</li>
+  <li>MySQL for data storage and management.</li>
+  <li>Nmap tool for capturing live network packets.</li>
+  <li>Reference and inspiration taken from Wireshark tool.</li>
+</ul>
 
-      {/* About Dialog */}
-      {showAbout && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="about-title"
-          style={{
-            position: 'fixed',
-            top: '30%',
-            left: '50%',
-            transform: 'translate(-50%, -30%)',
-            backgroundColor: '#fff',
-            padding: 20,
-            borderRadius: 8,
-            boxShadow: '0 2px 10px rgba(0,0,0,0.5)',
-            zIndex: 1500,
-            width: '300px',
-            color: '#000',
-          }}
-        >
-          <h2 id="about-title">About NetShield</h2>
-          <p>Version: 1.0.0</p>
-          <p>Author: Nilesh Ghavate</p>
-          <p>NetShield is a network packet capturing tool.</p>
-          <button onClick={() => setShowAbout(false)}>Close</button>
-        </div>
-      )}
+    <button 
+      onClick={() => setShowAbout(false)} 
+      style={{ 
+        backgroundColor: '#007bff', 
+        color: '#fff', 
+        border: 'none', 
+        padding: '8px 15px', 
+        borderRadius: '4px', 
+        cursor: 'pointer' 
+      }}
+    >
+      Close
+    </button>
+  </div>
+)}
+
     </div>
   );
 };

@@ -100,11 +100,11 @@ const WelcomePage = () => {
   return (
     <main className="welcome-page">
       <header className="welcome-header">
-        <h1>🔒 Welcome to <span className="highlight">Net Shield</span></h1>
+        <h1>🔒 WELCOME TO  <span className="highlight">NET SHIELD 🔒</span></h1>
 
         {/* Running marquee-style line */}
         <div className="marquee-container">
-          <p className="marquee-text">🔒 See the unseen. Secure the unknown. 🔒</p>
+          <p className="marquee-text">🔒 <strong>SEE THE UNSEEN. SECURE THE UNKNOWN. 🔒</strong></p>
         </div>
 
         <p className="subtitle">

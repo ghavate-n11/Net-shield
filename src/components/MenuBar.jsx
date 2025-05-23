@@ -34,6 +34,7 @@ const MenuBar = () => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const [showAbout, setShowAbout] = useState(false);
   const [capturing, setCapturing] = useState(false);
+  const [capturedData, setCapturedData] = useState(''); // Store captured packet info
 
   const fileInputRef = useRef(null);
   const menuBarRef = useRef(null);
@@ -48,6 +49,17 @@ const MenuBar = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Simulate packet capture data
+  useEffect(() => {
+    let interval;
+    if (capturing) {
+      interval = setInterval(() => {
+        setCapturedData((prev) => prev + `Packet captured at ${new Date().toLocaleTimeString()}\n`);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [capturing]);
 
   const handleKeyDown = (e) => {
     if (openMenuIndex === null) {
@@ -127,6 +139,13 @@ const MenuBar = () => {
       case 'File:Open':
         fileInputRef.current.click();
         break;
+      case 'File:Save':
+        if (!capturedData) {
+          alert('No captured data to save!');
+          return;
+        }
+        saveCapturedData();
+        break;
       case 'View:Zoom In':
         setZoomLevel((z) => Math.min(z + 0.1, 2));
         break;
@@ -134,12 +153,20 @@ const MenuBar = () => {
         setZoomLevel((z) => Math.max(z - 0.1, 0.5));
         break;
       case 'Capture:Start':
-        setCapturing(true);
-        alert('Capture started (simulated)');
+        if (capturing) {
+          alert('Capture already started!');
+        } else {
+          setCapturing(true);
+          alert('Capture started (simulated)');
+        }
         break;
       case 'Capture:Stop':
-        setCapturing(false);
-        alert('Capture stopped (simulated)');
+        if (!capturing) {
+          alert('No capture is running.');
+        } else {
+          setCapturing(false);
+          alert('Capture stopped (simulated)');
+        }
         break;
       case 'Help:About':
         setShowAbout(true);
@@ -151,6 +178,20 @@ const MenuBar = () => {
         }
         alert(`${menu.label} → ${action} clicked`);
     }
+  };
+
+  const saveCapturedData = () => {
+    const blob = new Blob([capturedData], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `NetShield_Capture_${new Date().toISOString()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 0);
   };
 
   return (
@@ -252,64 +293,61 @@ const MenuBar = () => {
             justifyContent: 'center',
             zIndex: 2000,
           }}
+          onClick={() => setShowAbout(false)}
           role="dialog"
           aria-modal="true"
-          aria-labelledby="about-title"
-          onClick={() => setShowAbout(false)}
+          aria-labelledby="aboutTitle"
         >
           <div
             style={{
-              backgroundColor: '#222',
-              color: '#eee',
+              backgroundColor: '#fff',
               padding: 20,
               borderRadius: 8,
-              maxWidth: 500,
-              lineHeight: 1.6,
+              maxWidth: 400,
+              boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+              textAlign: 'center',
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 id="about-title">About Net Shield Web Application</h2>
-
-<p style={{ fontSize: '16px', lineHeight: '1.6', color: '#777' }}>
-  <strong>Net Shield</strong> <em>(v1.0.0)</em> is a modern, full-stack web application designed as a
-  <strong> Network Sniffing and Security Analyzer</strong>, offering real-time network monitoring,
-  traffic analysis, and protection against potential threats. This system enables users to understand
-  their network activity, detect anomalies, and maintain cybersecurity compliance. 
-  <strong> Net Shield</strong> delivers a fast, interactive, and secure experience for network administrators,
-  researchers, and cybersecurity enthusiasts.
-</p>
-
-<h2>Technology Stack</h2>
-<ul style={{ fontSize: '16px', color: '#555' }}>
-  <li><strong>Backend:</strong> Spring Boot (Java) Version 3.2</li>
-  <li><strong>Frontend:</strong> React.js Version 18</li>
-  <li><strong>Database:</strong> MySQL Version 8.0</li>
-</ul>
-
-<h3>Developed By</h3>
-<p style={{ fontSize: '16px', color: '#999' }}>
-  <strong>Nilesh Ghavate</strong> 
-</p>
-
-
-
-            <button
-              style={{
-                marginTop: 15,
-                padding: '8px 12px',
-                backgroundColor: '#444',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 4,
-                cursor: 'pointer',
-              }}
-              onClick={() => setShowAbout(false)}
-            >
-              Close
-            </button>
+            <h2 id="aboutTitle">About Net Shield</h2>
+            <p>
+              Version 1.0.0<br />
+              Developed by Nilesh Ghavate
+            </p>
+            <button onClick={() => setShowAbout(false)}>Close</button>
           </div>
         </div>
       )}
+
+      {/* Display Zoom Level */}
+      <div style={{ marginTop: 20, paddingLeft: 10, color: '#333' }}>
+        <strong>Zoom Level:</strong> {(zoomLevel * 100).toFixed(0)}%
+      </div>
+
+      {/* Display Capture Status */}
+      <div style={{ marginTop: 10, paddingLeft: 10, color: capturing ? 'green' : 'red' }}>
+        <strong>Capture Status:</strong> {capturing ? 'Running' : 'Stopped'}
+      </div>
+
+      {/* Display captured data preview */}
+      <textarea
+        readOnly
+        value={capturedData}
+        rows={10}
+        style={{
+          width: '95%',
+          margin: '20px auto',
+          display: 'block',
+          backgroundColor: '#f4f4f4',
+          padding: 10,
+          fontFamily: 'monospace',
+          fontSize: 12,
+          borderRadius: 4,
+          border: '1px solid #ccc',
+          resize: 'vertical',
+        }}
+        placeholder="Captured packets will appear here..."
+      />
     </div>
   );
 };

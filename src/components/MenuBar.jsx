@@ -3,10 +3,10 @@ import React, { useState, useEffect, useRef } from 'react';
 const menuStructure = [
   { label: 'File', submenu: ['Open', 'Save', 'Print','Quit'] },
   { label: 'Edit', submenu: ['Find Packet', 'Set Time Reference', 'Mark Packet', 'Preferences'] },
-  { label: 'View', submenu: ['Colorize Packets', 'Zoom In', 'Zoom Out', 'Packet Details'] },
+  { label: 'View', submenu: ['Zoom In', 'Zoom Out', 'Packet Details'] },
   { label: 'Go', submenu: ['Go to Packet'] },
-  { label: 'Capture', submenu: ['Start', 'Stop', 'Edit Filters'] },
-  { label: 'Analyze', submenu: ['Display Filters', 'Enable Protocol', 'Decode As', 'Follow TCP Stream'] },
+  { label: 'Capture', submenu: ['Start', 'Stop'] },
+  { label: 'Analyze', submenu: ['Display Filters', 'Enable Protocol',] },
   { label: 'Statistics', submenu: ['Summary', 'Protocol Hierarchy', 'Conversations', 'Endpoints'] },
   { label: 'Telephony', submenu: ['VoIP Calls', 'SIP Flows', 'RTP Streams'] },
   { label: 'Wireless', submenu: ['Bluetooth Stats', '802.11 Stats'] },
@@ -146,6 +146,12 @@ const MenuBar = () => {
         }
         saveCapturedData();
         break;
+         case 'File:Print':
+      window.print();
+      break;
+        case 'Quite':
+          window.close();
+          break;
       case 'View:Zoom In':
         setZoomLevel((z) => Math.min(z + 0.1, 2));
         break;

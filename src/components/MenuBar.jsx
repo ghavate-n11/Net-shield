@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const menuStructure = [
-  { label: 'File', submenu: ['Open', 'Merge', 'Save', 'Print', 'Export', 'Quit'] },
+  { label: 'File', submenu: ['Open', 'Save', 'Print','Quit'] },
   { label: 'Edit', submenu: ['Find Packet', 'Set Time Reference', 'Mark Packet', 'Preferences'] },
   { label: 'View', submenu: ['Colorize Packets', 'Zoom In', 'Zoom Out', 'Packet Details'] },
   { label: 'Go', submenu: ['Go to Packet'] },

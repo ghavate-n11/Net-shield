@@ -2,7 +2,7 @@
 .menu-container {
   position: relative;
   width: 100%;
-  background-color: #0f172a; /* Deep navy background */
+  background-color: #0f172a; /* Deep navy */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -24,7 +24,7 @@
   font-size: 1rem;
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .menu-item:hover,
@@ -33,20 +33,20 @@
   color: #60a5fa; /* Sky blue */
 }
 
-/* Submenu Styling */
+/* Submenu */
 .submenu {
   display: flex;
   flex-direction: column;
   position: absolute;
-  background-color: #1e293b;
-  border: 1px solid #475569;
-  border-radius: 8px;
   top: 3.3rem;
   left: 1rem;
   min-width: 220px;
-  z-index: 999;
   padding: 0.5rem 0;
+  background-color: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 999;
 }
 
 /* Submenu Items */
@@ -54,9 +54,9 @@
   padding: 0.6rem 1rem;
   color: #e2e8f0; /* Light text */
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
   font-size: 0.95rem;
   border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .submenu-item:hover,
@@ -65,11 +65,13 @@
   color: #38bdf8; /* Bright cyan */
 }
 
-/* File Display Styling */
+/* File Display */
 .file-display {
   margin: 1rem auto;
   padding: 1rem;
   max-width: 90%;
+  max-height: 400px;
+  overflow-y: auto;
   background-color: #f1f5f9;
   color: #0f172a;
   border: 1px solid #cbd5e1;
@@ -77,7 +79,5 @@
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.95rem;
   white-space: pre-wrap;
-  overflow-y: auto;
-  max-height: 400px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

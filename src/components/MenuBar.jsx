@@ -1,24 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const menuStructure = [
-  { label: 'File', submenu: ['Open', 'Save', 'Print','Quit'] },
+  { label: 'File', submenu: ['Open', 'Save', 'Print', 'Quit'] },
   { label: 'Edit', submenu: ['Find Packet', 'Set Time Reference', 'Mark Packet', 'Preferences'] },
   { label: 'View', submenu: ['Zoom In', 'Zoom Out', 'Packet Details'] },
   { label: 'Go', submenu: ['Go to Packet'] },
   { label: 'Capture', submenu: ['Start', 'Stop'] },
-  { label: 'Analyze', submenu: ['Display Filters', 'Enable Protocol',] },
+  { label: 'Analyze', submenu: ['Display Filters', 'Enable Protocol'] },
   { label: 'Statistics', submenu: ['Summary', 'Protocol Hierarchy', 'Conversations', 'Endpoints'] },
   { label: 'Telephony', submenu: ['VoIP Calls', 'SIP Flows', 'RTP Streams'] },
   { label: 'Wireless', submenu: ['Bluetooth Stats', '802.11 Stats'] },
   { label: 'Tools', submenu: ['Firewall ACL Rules'] },
   {
     label: 'Help',
-    submenu: [
-      "User's Guide",
-      'GitHub',
-      'FAQs',
-      'About',
-    ],
+    submenu: ["User's Guide", 'GitHub', 'FAQs', 'About'],
   },
 ];
 
@@ -34,10 +30,13 @@ const MenuBar = () => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const [showAbout, setShowAbout] = useState(false);
   const [capturing, setCapturing] = useState(false);
-  const [capturedData, setCapturedData] = useState(''); // Keep this for saving captured data
+  const [capturedData, setCapturedData] = useState('');
 
   const fileInputRef = useRef(null);
   const menuBarRef = useRef(null);
+
+  // Use navigate hook here
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -50,7 +49,6 @@ const MenuBar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Simulate packet capture data
   useEffect(() => {
     let interval;
     if (capturing) {
@@ -146,12 +144,12 @@ const MenuBar = () => {
         }
         saveCapturedData();
         break;
-         case 'File:Print':
-      window.print();
-      break;
-        case 'Quite':
-          window.close();
-          break;
+      case 'File:Print':
+        window.print();
+        break;
+      case 'File:Quit':
+        window.close();
+        break;
       case 'View:Zoom In':
         setZoomLevel((z) => Math.min(z + 0.1, 2));
         break;
@@ -173,6 +171,16 @@ const MenuBar = () => {
           setCapturing(false);
           alert('Capture stopped (simulated)');
         }
+        break;
+         case 'Wireless:Bluetooth Stats':
+      navigate('/bluetooth-stats');
+      break;
+
+    case 'Wireless:802.11 Stats':
+      navigate('/wireless-80211-stats');
+      break;
+      case 'Tools:Firewall ACL Rules':
+        navigate('/firewall-Rules'); // navigation using react-router-dom
         break;
       case 'Help:About':
         setShowAbout(true);
@@ -248,60 +256,72 @@ const MenuBar = () => {
                   left: 0,
                   backgroundColor: '#333',
                   border: '1px solid #555',
-                  minWidth: '160px',
-                  zIndex: 1000,
-                }}
-              >
-                {menu.submenu.map((subItem, subIdx) => (
-                  <li
-                    key={subItem}
-                    role="menuitem"
-                    tabIndex={focusedSubIndex === subIdx ? 0 : -1}
-                    onClick={() => handleMenuAction(idx, subIdx)}
-                    onMouseEnter={() => setFocusedSubIndex(subIdx)}
-                    style={{
-                      padding: '5px 20px',
-                      backgroundColor: focusedSubIndex === subIdx ? '#555' : 'transparent',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {subItem}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Hidden file input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        onChange={(e) => alert(`Selected file: ${e.target.files[0]?.name}`)}
-      />{/* About Dialog */}
-{showAbout && (
-  <div
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="about-title"
-    style={{
-      position: 'fixed',
-      top: '30%',
-      left: '50%',
-      transform: 'translate(-50%, -30%)',
-      backgroundColor: '#fff',
-      padding: 20,
-      borderRadius: 8,
-      boxShadow: '0 2px 10px rgba(0,0,0,0.5)',
-      zIndex: 1500,
-      width: '350px',
-      color: '#000',
-      fontFamily: 'Arial, sans-serif',
-      lineHeight: 1.5,
+minWidth: '180px',
+zIndex: 1000,
+}}
+>
+{menu.submenu.map((item, subIdx) => (
+<li
+key={item}
+role="menuitem"
+tabIndex={focusedSubIndex === subIdx ? 0 : -1}
+onClick={() => handleMenuAction(idx, subIdx)}
+onMouseEnter={() => setFocusedSubIndex(subIdx)}
+style={{
+padding: '5px 15px',
+backgroundColor: focusedSubIndex === subIdx ? '#666' : 'transparent',
+cursor: 'pointer',
+}}
+>
+{item}
+</li>
+))}
+</ul>
+)}
+</div>
+))}
+</div>
+{/* Hidden File Input for Open */}
+  <input
+    type="file"
+    ref={fileInputRef}
+    style={{ display: 'none' }}
+    onChange={(e) => {
+      const file = e.target.files[0];
+      if (file) {
+        alert(`Selected file: ${file.name}`);
+      }
+      e.target.value = '';
     }}
-  >
+  />
+
+  
+
+
+
+
+      {/* About Dialog */}
+      {showAbout && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="about-title"
+          style={{
+            position: 'fixed',
+            top: '30%',
+            left: '50%',
+            transform: 'translate(-50%, -30%)',
+            backgroundColor: '#fff',
+            padding: 20,
+            borderRadius: 8,
+            boxShadow: '0 2px 10px rgba(0,0,0,0.5)',
+            zIndex: 1500,
+            width: '350px',
+            color: '#000',
+            fontFamily: 'Arial, sans-serif',
+            lineHeight: 1.5,
+          }}
+        >
     <h2 id="about-title" style={{ marginBottom: '10px' }}>About Net Shield</h2>
     <p><strong>Version:</strong> 1.0.0</p>
     <p><strong>Developed By: Nilesh Ghavate (MCA)</strong> </p>

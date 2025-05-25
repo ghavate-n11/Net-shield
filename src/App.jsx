@@ -14,11 +14,13 @@ import CapturePage from './pages/CapturePage';
 import AboutPage from './pages/AboutPage';
 import NetworkScanner from './components/NetworkScanner';
 import FirewallRules from './pages/FirewallRules'; // ✅ Import the new page
+import BluetoothStats from './components/BluetoothStats';
+import Wireless80211Stats from './components/Wireless80211Stats';
 
 const Layout = () => {
   const location = useLocation();
 
-  // ✅ Add '/firewall-rules' so MenuBar shows on that page too
+  // ✅ Show MenuBar on these pages, including firewall-rules
   const showMenuBar = 
     location.pathname === '/dashboard' ||
     location.pathname === '/network-scanner' ||
@@ -37,6 +39,8 @@ const Layout = () => {
         <Route path="/capture" element={<CapturePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/network-scanner" element={<NetworkScanner />} />
+         <Route path="/bluetooth-stats" element={<BluetoothStats />} />
+        <Route path="/wireless-80211-stats" element={<Wireless80211Stats />} />
         <Route path="/firewall-rules" element={<FirewallRules />} /> {/* ✅ New route */}
       </Routes>
       <Footer />

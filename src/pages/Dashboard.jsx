@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-
+import axios from 'axios';
 // Ribbon component: filter input + start/stop/reload buttons
 const Ribbon = ({ filter, onFilterChange, onStart, onStop, onReload, isCapturing }) => (
   <div
@@ -340,101 +340,101 @@ const Dashboard = () => {
   const packetIndexRef = useRef(0);
 
   // Example packet data to simulate capturing
-  const allPackets = [
-    {
-      id: 'pkt1',
-      source: '192.168.0.2',
-      destination: '192.168.0.10',
-      protocol: 'TCP',
-      length: 60,
-      info: 'TCP handshake SYN',
-      details: {
-        ethernet: '...',
-        ip: '...',
-        tcp: 'SYN',
-      },
+ const allPackets = [
+  {
+    id: 'pkt1',
+    source: '192.168.0.2',
+    destination: '192.168.0.10',
+    protocol: 'TCP',
+    length: 60,
+    info: 'TCP 192.168.0.2:12345 → 192.168.0.10:80 [SYN] Seq=0 Win=64240 Len=0 MSS=1460',
+    details: {
+      ethernet: '...',
+      ip: '...',
+      tcp: 'SYN',
     },
-    {
-      id: 'pkt2',
-      source: '192.168.0.10',
-      destination: '192.168.0.2',
-      protocol: 'TCP',
-      length: 60,
-      info: 'TCP handshake SYN-ACK',
-      details: {
-        ethernet: '...',
-        ip: '...',
-        tcp: 'SYN-ACK',
-      },
+  },
+  {
+    id: 'pkt2',
+    source: '192.168.0.10',
+    destination: '192.168.0.2',
+    protocol: 'TCP',
+    length: 60,
+    info: 'TCP 192.168.0.10:80 → 192.168.0.2:12345 [SYN, ACK] Seq=0 Ack=1 Win=64240 Len=0 MSS=1460',
+    details: {
+      ethernet: '...',
+      ip: '...',
+      tcp: 'SYN-ACK',
     },
-    {
-      id: 'pkt3',
-      source: '192.168.0.2',
-      destination: '192.168.0.10',
-      protocol: 'TCP',
-      length: 54,
-      info: 'ACK to SYN-ACK',
-      details: {
-        ethernet: '...',
-        ip: '...',
-        tcp: 'ACK',
-      },
+  },
+  {
+    id: 'pkt3',
+    source: '192.168.0.2',
+    destination: '192.168.0.10',
+    protocol: 'TCP',
+    length: 54,
+    info: 'TCP 192.168.0.2:12345 → 192.168.0.10:80 [ACK] Seq=1 Ack=1 Win=64240 Len=0',
+    details: {
+      ethernet: '...',
+      ip: '...',
+      tcp: 'ACK',
     },
-    {
-      id: 'pkt4',
-      source: '192.168.0.2',
-      destination: '192.168.0.10',
-      protocol: 'HTTP',
-      length: 150,
-      info: 'GET /index.html',
-      details: {
-        ethernet: '...',
-        ip: '...',
-        tcp: '...',
-        http: 'GET /index.html HTTP/1.1',
-      },
+  },
+  {
+    id: 'pkt4',
+    source: '192.168.0.2',
+    destination: '192.168.0.10',
+    protocol: 'HTTP',
+    length: 150,
+    info: 'GET /index.html HTTP/1.1',
+    details: {
+      ethernet: '...',
+      ip: '...',
+      tcp: '...',
+      http: 'GET /index.html HTTP/1.1',
     },
-    {
-      id: 'pkt5',
-      source: '192.168.0.10',
-      destination: '192.168.0.2',
-      protocol: 'HTTP',
-      length: 500,
-      info: 'HTTP 200 OK',
-      details: {
-        ethernet: '...',
-        ip: '...',
-        tcp: '...',
-        http: 'HTTP/1.1 200 OK',
-      },
+  },
+  {
+    id: 'pkt5',
+    source: '192.168.0.10',
+    destination: '192.168.0.2',
+    protocol: 'HTTP',
+    length: 500,
+    info: 'HTTP/1.1 200 OK (text/html)',
+    details: {
+      ethernet: '...',
+      ip: '...',
+      tcp: '...',
+      http: 'HTTP/1.1 200 OK',
     },
-    {
-      id: 'pkt6',
-      source: '192.168.0.2',
-      destination: '8.8.8.8',
-      protocol: 'ICMP',
-      length: 74,
-      info: 'Echo request',
-      details: {
-        ethernet: '...',
-        ip: '...',
-        icmp: 'Echo request',
-      },
+  },
+  {
+    id: 'pkt6',
+    source: '192.168.0.2',
+    destination: '8.8.8.8',
+    protocol: 'ICMP',
+    length: 74,
+    info: 'Echo (ping) request id=0x1, seq=1, ttl=64',
+    details: {
+      ethernet: '...',
+      ip: '...',
+      icmp: 'Echo request',
     },
-    {
-      id: 'pkt7',
-      source: '8.8.8.8',
-      destination: '192.168.0.2',
-      protocol: 'ICMP',
-      length: 74,
-      info: 'Echo reply',
-      details: {
-        ethernet: '...',
-        ip: '...',
-        icmp: 'Echo reply',
-      },
+  },
+  {
+    id: 'pkt7',
+    source: '8.8.8.8',
+    destination: '192.168.0.2',
+    protocol: 'ICMP',
+    length: 74,
+    info: 'Echo (ping) reply id=0x1, seq=1, ttl=128',
+    details: {
+      ethernet: '...',
+      ip: '...',
+      icmp: 'Echo reply',
     },
-  ];
+  },
+];
 
   // Debounce filter for performance
   const debouncedFilter = useDebounce(filter, 300);

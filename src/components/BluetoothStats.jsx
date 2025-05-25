@@ -88,7 +88,7 @@ const BluetoothStats = () => {
       </div>
 
       <h1>Bluetooth Stats</h1>
-      <p>This page displays live Bluetooth network statistics similar to Wireshark.</p>
+      <p>This page displays live Bluetooth network statistics </p>
 
       <table style={tableStyle}>
         <tbody>

@@ -279,12 +279,14 @@ const PacketDiagram = ({ packet }) => {
           {packet.destination}
         </div>
       </div>
-      <div style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#a3d9ffaa' }}>
-        Protocol: {packet.protocol} | Length: {packet.length}
+      <div style={{ marginTop: '0.75rem', fontSize: '0.9rem' }}>
+        <strong>Protocol:</strong> {packet.protocol} &nbsp; | &nbsp;
+        <strong>Length:</strong> {packet.length}
       </div>
     </div>
   );
 };
+
 
 // SummaryPanel component: show total captured packets and breakdown by protocol
 const SummaryPanel = ({ packets }) => {
@@ -457,7 +459,7 @@ const Dashboard = () => {
         return;
       }
       setPackets((prev) => [...prev, allPackets[packetIndexRef.current++]]);
-    }, 2000);
+    }, 1500);
 
     return () => clearInterval(interval);
   }, [isCapturing]);

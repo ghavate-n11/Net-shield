@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './WelcomePage.css';
 
-
 const WelcomePage = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState('');

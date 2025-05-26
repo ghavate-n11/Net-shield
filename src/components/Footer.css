@@ -1,0 +1,14 @@
+.app-footer {
+    padding: 1.5rem 1rem; /* Slightly more padding */
+    background-color: #1A202C; /* Match your welcome page's primary background color */
+    margin-top: 3rem; /* More space above the footer */
+    text-align: center;
+    color: #A0AEC0; /* Use a secondary text color from your palette */
+    font-size: 0.9rem;
+    border-top: 1px solid #4A5568; /* Subtle border at the top */
+}
+
+/* Optional: Make it stick to the bottom if your content is short */
+/* This usually requires the parent (e.g., #root or .app-container) to have min-height: 100vh and display: flex; flex-direction: column; */
+/* And then the main content area would have flex-grow: 1; */
+/* If your content always fills the screen, this might not be necessary. */

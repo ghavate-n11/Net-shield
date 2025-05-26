@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Github, Linkedin } from 'lucide-react';
+
 
 const menuStructure = [
   { label: 'File', submenu: ['Open', 'Save', 'Print'] },
@@ -173,13 +173,21 @@ const MenuBar = () => {
           alert('Capture stopped (simulated)');
         }
         break;
-         case 'Wireless:Bluetooth Stats':
-      navigate('/bluetooth-stats');
-      break;
-
-    case 'Wireless:802.11 Stats':
-      navigate('/wireless-80211-stats');
-      break;
+      case 'Telephony:VoIP Calls':
+        navigate('/voip-calls');
+        break;
+      case 'Telephony:SIP Flows':
+        navigate('/sip-flows');
+        break;
+      case 'Telephony:RTP Streams':
+        navigate('/rtp-streams');
+        break;
+      case 'Wireless:Bluetooth Stats':
+        navigate('/bluetooth-stats');
+        break;
+      case 'Wireless:802.11 Stats':
+        navigate('/wireless-80211-stats');
+        break;
       case 'Tools:Firewall ACL Rules':
         navigate('/firewall-Rules'); // navigation using react-router-dom
         break;
@@ -257,199 +265,197 @@ const MenuBar = () => {
                   left: 0,
                   backgroundColor: '#333',
                   border: '1px solid #555',
-minWidth: '180px',
-zIndex: 1000,
-}}
->
-{menu.submenu.map((item, subIdx) => (
-<li
-key={item}
-role="menuitem"
-tabIndex={focusedSubIndex === subIdx ? 0 : -1}
-onClick={() => handleMenuAction(idx, subIdx)}
-onMouseEnter={() => setFocusedSubIndex(subIdx)}
-style={{
-padding: '5px 15px',
-backgroundColor: focusedSubIndex === subIdx ? '#666' : 'transparent',
-cursor: 'pointer',
-}}
->
-{item}
-</li>
-))}
-</ul>
-)}
-</div>
-))}
-</div>
-{/* Hidden File Input for Open */}
-  <input
-    type="file"
-    ref={fileInputRef}
-    style={{ display: 'none' }}
-    onChange={(e) => {
-      const file = e.target.files[0];
-      if (file) {
-        alert(`Selected file: ${file.name}`);
-      }
-      e.target.value = '';
-    }}
-  />
-{showAbout && (
-  <div
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="about-title"
-    style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 2000,
-      padding: '20px',
-    }}
-    onClick={() => setShowAbout(false)}
-  >
-    <div
-      onClick={(e) => e.stopPropagation()}
-      style={{
-        backgroundColor: '#fff',
-        color: '#000',
-        padding: '25px',
-        borderRadius: '12px',
-        maxWidth: '600px',
-        width: '100%',
-        textAlign: 'center',
-        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
-        overflowY: 'auto',
-        maxHeight: '90vh',
-      }}
-    >
-      {/* Project Logo */}
-      <img
-        src="src/assets/Logo.png"
-        alt="NetShield Logo"
-        style={{ width: '100px', marginBottom: '10px', borderRadius: '8px' }}
-      />
-
-      <h2 id="about-title">About Net Shield</h2>
-      <p><strong>Version:</strong>  Net Shield v1.0.0</p>
-   <p><strong>Domain:</strong> Cybersecurity / Network Security</p>
-
-   <p><strong>Developed By:</strong> Nilesh B. Ghavate (MCA Final Year, SVERI's COE, Pandharpur [PAH Solapur University, Solapur])</p>
-
-      <p><strong>Project Purpose:</strong> Net Shield is a web-based network packet capturing tool designed to help users monitor and analyze network traffic for troubleshooting and security auditing. 
-  It is useful for identifying suspicious activity, diagnosing network issues, ensuring compliance with security policies, and gaining insights into network performance.
-</p>
-      <p><strong>Key Features:</strong></p>
-      <ul style={{ textAlign: 'left', margin: '0 auto', maxWidth: '90%' }}>
-        <li>Capture and display real-time network packets.</li>
-        <li>Start and stop capturing sessions easily.</li>
-        <li>Save captured data for offline analysis.</li>
-        <li>User-friendly interface with zoom functionality.</li>
-      </ul>
-
-      <p><strong>Technologies Used:</strong></p>
-      <ul style={{ textAlign: 'left', margin: '0 auto', maxWidth: '90%' }}>
-        <li>React.js for frontend UI development.</li>
-        <li>Spring Boot for backend APIs.</li>
-        <li>MySQL for database management.</li>
-        <li>Nmap tool for packet capture.</li>
-        <li>Inspired by Wireshark.</li>
-      </ul>
-
-      {/* Developer Photo */}
-      <img
-        src="src/assets/images/Screenshot 2025-05-10 181434.png"
-        alt="Developer"
-        style={{
-          width: '90px',
-          height: '90px',
-          borderRadius: '50%',
-          marginBottom: '10px',
-          objectFit: 'cover',
-          border: '2px solid #222',
-        }}
-      />
-
-      {/* Name & Role */}
-      <div style={{ marginBottom: '15px' }}>
-        <h3 style={{ margin: '5px 0' }}>Nilesh Ghavate</h3>
-        <p style={{ margin: 0, fontWeight: '500', color: '#555' }}>
-          Java Full Stack Developer Intern
-        </p>
+                  minWidth: '180px',
+                  zIndex: 1000,
+                }}
+              >
+                {menu.submenu.map((item, subIdx) => (
+                  <li
+                    key={item}
+                    role="menuitem"
+                    tabIndex={focusedSubIndex === subIdx ? 0 : -1}
+                    onClick={() => handleMenuAction(idx, subIdx)}
+                    onMouseEnter={() => setFocusedSubIndex(subIdx)}
+                    style={{
+                      padding: '5px 15px',
+                      backgroundColor: focusedSubIndex === subIdx ? '#666' : 'transparent',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
       </div>
-
-    {/* Social Links */}
-<div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
-  {/* GitHub Image Link */}
-  <a
-    href="https://github.com/ghavate-n11"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="GitHub Profile"
-  >
-    <img
-      src="src/assets/images/github.png" // Path to your GitHub image
-      alt="GitHub"
-      style={{ width: '28px', height: '28px' }}
-    />
-  </a>
-
-  {/* LinkedIn Image Link */}
-  <a
-    href="https://www.linkedin.com/in/nileshghavate-203b27251/"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="LinkedIn Profile"
-  >
-    <img
-      src="src/assets/images/linkedin.png" // Path to your LinkedIn image
-      alt="LinkedIn"
-      style={{ width: '28px', height: '28px' }}
-    />
-  </a>
-
-  {/* HackerRank Image Link */}
-  <a
-    href="https://www.hackerrank.com/profile/nileshghavate11"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="HackerRank Profile"
-  >
-    <img
-      src="src/assets/images/HackerRank_Icon-1000px.png"
-      alt="HackerRank"
-      style={{ width: '28px', height: '28px' }}
-    />
-  </a>
-</div>
-
-      {/* Close Button */}
-      <button
-        onClick={() => setShowAbout(false)}
-        style={{
-          marginTop: '25px',
-          padding: '10px 20px',
-          backgroundColor: '#222',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: 'pointer',
+      {/* Hidden File Input for Open */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            alert(`Selected file: ${file.name}`);
+          }
+          e.target.value = '';
         }}
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
+      />
+      {showAbout && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="about-title"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2000,
+            padding: '20px',
+          }}
+          onClick={() => setShowAbout(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: '#fff',
+              color: '#000',
+              padding: '25px',
+              borderRadius: '12px',
+              maxWidth: '600px',
+              width: '100%',
+              textAlign: 'center',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+              overflowY: 'auto',
+              maxHeight: '90vh',
+            }}
+          >
+            {/* Project Logo */}
+            <img
+              src="src/assets/Logo.png"
+              alt="NetShield Logo"
+              style={{ width: '100px', marginBottom: '10px', borderRadius: '8px' }}
+            />
 
+            <h2 id="about-title">About Net Shield</h2>
+            <p><strong>Version:</strong> Net Shield v1.0.0</p>
+            <p><strong>Domain:</strong> Cybersecurity / Network Security</p>
 
+            <p><strong>Developed By:</strong> Nilesh B. Ghavate (MCA Final Year, SVERI's COE, Pandharpur [PAH Solapur University, Solapur])</p>
+
+            <p><strong>Project Purpose:</strong> Net Shield is a web-based network packet capturing tool designed to help users monitor and analyze network traffic for troubleshooting and security auditing.
+              It is useful for identifying suspicious activity, diagnosing network issues, ensuring compliance with security policies, and gaining insights into network performance.
+            </p>
+            <p><strong>Key Features:</strong></p>
+            <ul style={{ textAlign: 'left', margin: '0 auto', maxWidth: '90%' }}>
+              <li>Capture and display real-time network packets.</li>
+              <li>Start and stop capturing sessions easily.</li>
+              <li>Save captured data for offline analysis.</li>
+              <li>User-friendly interface with zoom functionality.</li>
+            </ul>
+
+            <p><strong>Technologies Used:</strong></p>
+            <ul style={{ textAlign: 'left', margin: '0 auto', maxWidth: '90%' }}>
+              <li>React.js for frontend UI development.</li>
+              <li>Spring Boot for backend APIs.</li>
+              <li>MySQL for database management.</li>
+              <li>Nmap tool for packet capture.</li>
+              <li>Inspired by Wireshark.</li>
+            </ul>
+
+            {/* Developer Photo */}
+            <img
+              src="src/assets/images/Screenshot 2025-05-10 181434.png"
+              alt="Developer"
+              style={{
+                width: '90px',
+                height: '90px',
+                borderRadius: '50%',
+                marginBottom: '10px',
+                objectFit: 'cover',
+                border: '2px solid #222',
+              }}
+            />
+
+            {/* Name & Role */}
+            <div style={{ marginBottom: '15px' }}>
+              <h3 style={{ margin: '5px 0' }}>Nilesh Ghavate</h3>
+              <p style={{ margin: 0, fontWeight: '500', color: '#555' }}>
+                Java Full Stack Developer Intern
+              </p>
+            </div>
+
+            {/* Social Links */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
+              {/* GitHub Image Link */}
+              <a
+                href="https://github.com/ghavate-n11"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub Profile"
+              >
+                <img
+                  src="src/assets/images/github.png" // Path to your GitHub image
+                  alt="GitHub"
+                  style={{ width: '28px', height: '28px' }}
+                />
+              </a>
+
+              {/* LinkedIn Image Link */}
+              <a
+                href="https://www.linkedin.com/in/nileshghavate-203b27251/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn Profile"
+              >
+                <img
+                  src="src/assets/images/linkedin.png" // Path to your LinkedIn image
+                  alt="LinkedIn"
+                  style={{ width: '28px', height: '28px' }}
+                />
+              </a>
+
+              {/* HackerRank Image Link */}
+              <a
+                href="https://www.hackerrank.com/profile/nileshghavate11"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="HackerRank Profile"
+              >
+                <img
+                  src="src/assets/images/HackerRank_Icon-1000px.png"
+                  alt="HackerRank"
+                  style={{ width: '28px', height: '28px' }}
+                />
+              </a>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setShowAbout(false)}
+              style={{
+                marginTop: '25px',
+                padding: '10px 20px',
+                backgroundColor: '#222',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

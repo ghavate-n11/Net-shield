@@ -1,0 +1,85 @@
+.app-header {
+  background: linear-gradient(to right, #1A2A44, #0D1B2A);
+  color: #E0E0E0;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.logo-link:hover {
+  color: #64B5F6;
+}
+
+.netshield-logo {
+  height: 40px;
+  margin-right: 10px;
+  filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.7));
+}
+
+.logo-text {
+  color: #E0E0E0;
+}
+
+.header-nav .nav-link {
+  color: #ADD8E6;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 8px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.header-nav .nav-link:hover {
+  background-color: rgba(100, 181, 246, 0.2);
+  color: #E0E0E0;
+}
+
+.header-nav .nav-link.active {
+  background-color: #2196F3;
+  color: white;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.4);
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 10px 20px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .logo-link {
+    font-size: 1.3rem;
+  }
+  .netshield-logo {
+    height: 35px;
+  }
+  .header-nav {
+    margin-top: 5px;
+  }
+  .header-nav .nav-link {
+    font-size: 1rem;
+    padding: 6px 12px;
+  }
+}

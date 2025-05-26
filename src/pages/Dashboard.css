@@ -1,0 +1,441 @@
+/* src/pages/Dashboard.css */
+
+/* Color Palette (similar to WelcomePage for consistency, but slightly adapted for dark theme) */
+:root {
+    --color-bg-dark: #1E2738; /* Main dark background */
+    --color-bg-medium: #2A3343; /* Medium background for panels */
+    --color-bg-light: #354050;  /* Lighter background for elements like table headers */
+
+    --color-text-primary: #E0E0E0; /* Light text */
+    --color-text-secondary: #A0AEC0; /* Muted text */
+    --color-text-accent-blue: #64B5F6; /* Accent blue for highlights */
+    --color-text-highlight-green: #4CAF50; /* Green for success/active */
+    --color-text-warn-yellow: #FFC107; /* Yellow for warnings/attention */
+    --color-text-error: #EF4444; /* Red for errors */
+
+    --color-border-main: #4A5568; /* Main border color */
+    --color-border-accent: #64B5F6; /* Accent border for active states */
+    --color-shadow-dark: rgba(0, 0, 0, 0.4);
+
+    --color-button-primary: #4299E1; /* Primary action button */
+    --color-button-primary-hover: #3182CE;
+    --color-button-secondary: #F6AD55; /* Secondary action button */
+    --color-button-secondary-hover: #ED8936;
+    --color-button-disabled: #6B7280;
+
+    --color-table-header-bg: #354050;
+    --color-table-row-even: #2A3343;
+    --color-table-row-odd: #232B39;
+    --color-table-row-hover: #3D4A5E;
+    --color-table-border: #4A5568;
+    --color-selected-row: #4A90E2; /* Bright blue for selected row */
+    --color-selected-row-text: #FFFFFF;
+}
+
+/* Base styles */
+body {
+    background-color: var(--color-bg-dark); /* Ensure body matches the dashboard theme */
+    color: var(--color-text-primary);
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent body scroll, layout will handle content overflow */
+}
+
+/* Dashboard Container - Full viewport height */
+.dashboard-container {
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Header, Main Content (flexible), Footer */
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent scrolling on the main container */
+}
+
+/* Ribbon Component */
+.ribbon {
+    background-color: var(--color-bg-light);
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    color: var(--color-text-primary);
+    box-shadow: 0 2px 8px var(--color-shadow-dark);
+    border-bottom: 1px solid var(--color-border-main);
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.ribbon label {
+    font-weight: 600;
+    font-size: 1rem;
+    white-space: nowrap; /* Prevent "Filter:" from wrapping */
+}
+
+.ribbon input[type="text"] {
+    flex-grow: 1;
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-border-main);
+    background-color: var(--color-bg-medium);
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.ribbon input[type="text"]::placeholder {
+    color: var(--color-text-secondary);
+}
+
+.ribbon input[type="text"]:focus {
+    outline: none;
+    border-color: var(--color-border-accent);
+    box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.3);
+}
+
+.ribbon button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    white-space: nowrap; /* Prevent button text from wrapping */
+}
+
+.ribbon button.start-btn {
+    background-color: var(--color-text-highlight-green);
+}
+.ribbon button.start-btn:hover:not(:disabled) {
+    background-color: #388E3C; /* Darker green */
+    transform: translateY(-1px);
+}
+
+.ribbon button.stop-btn {
+    background-color: var(--color-text-error);
+}
+.ribbon button.stop-btn:hover:not(:disabled) {
+    background-color: #C62828; /* Darker red */
+    transform: translateY(-1px);
+}
+
+.ribbon button.reload-btn {
+    background-color: var(--color-button-primary);
+}
+.ribbon button.reload-btn:hover:not(:disabled) {
+    background-color: var(--color-button-primary-hover);
+    transform: translateY(-1px);
+}
+
+.ribbon button:disabled {
+    background-color: var(--color-button-disabled);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Main content area (split into two columns) */
+.dashboard-main-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Packet List (2/3) and Details/Diagram/Summary (1/3) */
+    gap: 1rem;
+    padding: 1rem;
+    overflow: hidden; /* Manage internal scrolling */
+}
+
+/* Left Pane: Network Table */
+.network-table-container {
+    background-color: var(--color-bg-medium);
+    border-radius: 8px;
+    overflow: auto; /* Enable scrolling for table content */
+    box-shadow: 0 4px 15px var(--color-shadow-dark);
+    border: 1px solid var(--color-border-main);
+    padding: 0.5rem; /* Padding inside the table container */
+}
+
+.network-table {
+    width: 100%;
+    border-collapse: separate; /* Use separate to allow border-radius on cells if desired */
+    border-spacing: 0;
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 0.88rem;
+    color: var(--color-text-primary);
+}
+
+.network-table thead {
+    background-color: var(--color-table-header-bg);
+    position: sticky; /* Make header sticky */
+    top: 0;
+    z-index: 10;
+}
+
+.network-table th {
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid var(--color-table-border);
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.network-table tbody tr {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.network-table tbody tr:nth-child(even) {
+    background-color: var(--color-table-row-even);
+}
+
+.network-table tbody tr:nth-child(odd) {
+    background-color: var(--color-table-row-odd);
+}
+
+.network-table tbody tr:hover {
+    background-color: var(--color-table-row-hover);
+    cursor: pointer;
+}
+
+.network-table tbody tr.selected {
+    background-color: var(--color-selected-row);
+    color: var(--color-selected-row-text);
+    outline: 2px solid var(--color-selected-row); /* Ensure outline for focus */
+}
+
+.network-table td {
+    padding: 0.6rem 0.5rem;
+    border-bottom: 1px solid var(--color-table-border);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.network-table .no-packets {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    padding: 1.5rem;
+}
+
+/* Right Pane: Details, Diagram, Summary */
+.details-sidebar {
+    display: grid;
+    grid-template-rows: 1.5fr 1fr 1fr 1.5fr; /* Details, Hex, Diagram, Summary */
+    gap: 1rem;
+    overflow-y: auto; /* Allow scrolling within the sidebar */
+    padding-right: 0.5rem; /* Small padding for scrollbar */
+}
+
+.panel-common {
+    background-color: var(--color-bg-medium);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 15px var(--color-shadow-dark);
+    border: 1px solid var(--color-border-main);
+    overflow: auto; /* Allow content inside panels to scroll */
+}
+
+.panel-common h3, .panel-common h4 {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    color: var(--color-text-accent-blue);
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-border-main);
+    padding-bottom: 0.5rem;
+}
+
+.panel-common.placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+/* Packet Details Panel */
+.packet-details-panel ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.packet-details-panel ul ul { /* Nested lists for layers */
+    padding-left: 1.5rem;
+    margin-top: 0.3rem;
+}
+
+.packet-details-panel li {
+    margin-bottom: 0.3rem;
+    line-height: 1.4;
+    white-space: pre-wrap; /* Preserve whitespace and allow wrapping */
+    word-break: break-word; /* Break long words */
+}
+
+.packet-details-panel li strong {
+    color: var(--color-text-accent-blue);
+}
+
+.packet-details-panel .layer-header {
+    font-weight: bold;
+    color: var(--color-text-highlight-green);
+    margin-top: 0.8rem;
+    margin-bottom: 0.3rem;
+    padding-left: 0; /* Override nested padding */
+}
+
+
+/* Hex Dump Panel */
+.hex-dump-panel pre {
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--color-text-primary);
+}
+
+
+/* Packet Diagram Panel */
+.packet-diagram-panel {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.packet-diagram-panel h4 {
+    margin-bottom: 1rem;
+    border-bottom: none; /* No border for diagram title */
+    padding-bottom: 0;
+}
+
+.packet-diagram-panel .flow-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.packet-diagram-panel .endpoint-box {
+    background-color: var(--color-bg-light);
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(100, 181, 246, 0.4);
+    user-select: none;
+    white-space: nowrap;
+    border: 1px solid var(--color-border-accent);
+}
+
+.packet-diagram-panel .arrow {
+    font-size: 2.5rem;
+    color: var(--color-text-accent-blue);
+    user-select: none;
+}
+
+.packet-diagram-panel .protocol-info {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+}
+
+/* Summary Panel */
+.summary-panel p {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.summary-panel strong {
+    color: var(--color-text-highlight-green);
+}
+
+.summary-panel .protocol-counts div {
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .dashboard-main-content {
+        grid-template-columns: 3fr 2fr; /* Adjust column ratio */
+    }
+}
+
+@media (max-width: 992px) {
+    .ribbon {
+        padding: 0.6rem 1rem;
+        gap: 0.8rem;
+    }
+    .ribbon button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    .ribbon input[type="text"] {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.9rem;
+    }
+
+    .dashboard-main-content {
+        grid-template-columns: 1fr; /* Stack columns on smaller screens */
+        grid-template-rows: 2fr 1fr; /* Packet list takes more space */
+        padding: 0.8rem;
+    }
+
+    .network-table-container {
+        min-height: 40vh; /* Ensure table has minimum height */
+    }
+
+    .details-sidebar {
+        grid-template-rows: repeat(auto-fit, minmax(100px, 1fr)); /* Auto fit rows, minimum 100px height */
+        /* Flex direction might be better here to just stack them if needed, but grid might still work */
+        padding-right: 0; /* No padding on right when single column */
+    }
+
+    .panel-common {
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .ribbon {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+    }
+    .ribbon label {
+        text-align: center;
+    }
+    .ribbon button {
+        width: 100%; /* Full width buttons */
+    }
+    .ribbon input[type="text"] {
+        width: 100%;
+    }
+
+    .dashboard-main-content {
+        gap: 0.8rem;
+        padding: 0.5rem;
+    }
+}
+
+/* Scrollbar styling for a consistent look (Webkit browsers) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-dark);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-bg-light);
+    border-radius: 5px;
+    border: 2px solid var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-bg-medium);
+}

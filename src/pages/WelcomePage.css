@@ -1,269 +1,533 @@
-/* Main welcome page container */
-.welcome-page {
-  max-width:unset;
-  margin: 2rem auto 2rem;
-  padding: 1.5rem 2rem;
-  background-color: #0e0743;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(31, 210, 49, 0.6);
-  transition: background-color 0.3s ease;
-  
-  color: white;  /* Set all font color inside this container to white */
+/* src/pages/WelcomePage.css */
+
+/* --- Color Palette (can remove if defined globally in index.css, or keep for page-specific overrides) --- */
+:root {
+    /* Keeping these local for now, but consider making truly global if used everywhere */
+    --color-bg-gradient-start: #441a32;
+    --color-bg-gradient-end: #0D1B2A;
+    --color-card-bg: #2B3A5A;
+    --color-section-bg: #3A4E6C;
+
+    --color-text-primary: #E0E0E0;
+    --color-text-secondary: #B0B0B0;
+    --color-text-highlight: #4CAF50;
+    --color-text-accent-blue: #64B5F6;
+    --color-text-accent-yellow: #FFD700;
+    --color-text-error: #FF5252;
+
+    --color-border-dark: #3C4A6A;
+    --color-border-light: #5A6D8C;
+    --color-shadow: rgba(0, 0, 0, 0.5);
+    --color-shadow-highlight: rgba(76, 175, 80, 0.4);
+    --color-shadow-accent: rgba(100, 181, 246, 0.4);
+
+    --color-button-primary: #4CAF50;
+    --color-button-primary-hover: #66BB6A;
+    --color-button-secondary: #9d6618;
+    --color-button-secondary-hover: #dbde23;
+    --color-button-disabled: #5A6D8C;
+    --color-input-bg: #1F2E4A;
+    --color-input-border: #4A5C7A;
+    --color-input-focus-border: #64B5F6;
+    --color-hover-item: #3C4E6A;
 }
 
-/* Header */
+
+/* Main welcome page container */
+.welcome-page {
+    /* No max-width here if main-content-wrapper handles it */
+    max-width: default; /* Retain maximum content width */
+    width: 100%; /* Takes full width of its parent (main-content-wrapper) up to max-width */
+    margin: 0; /* Remove auto margins, parent flex handles centering */
+    padding: 2.5rem 3rem; /* Generous padding inside the card */
+    background-color: var(--color-card-bg);
+    border-radius: 15px;
+    box-shadow: 0 12px 40px var(--color-shadow);
+    border: 1px solid var(--color-border-dark);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    box-sizing: border-box; /* Crucial for padding/width calculations */
+}
+
+/* Remove header-specific styles from here */
 .welcome-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  /* color inherited as white */
+    text-align: center;
+    /* margin-bottom handled by gap on parent */
 }
 
 .welcome-header h1 {
-  font-size: 2.25rem;
-  color: #23c556; /* keep your green highlight for header */
+    font-size: 2.8rem;
+    color: var(--color-text-highlight);
+    text-shadow: 0 0 15px rgba(198, 17, 62, 0.7);
+    margin-bottom: 0.8rem;
 }
 
 .welcome-header .highlight {
-  color: #14ee72; /* keep highlight green */
+    color: var(--color-text-highlight);
 }
 
 .subtitle {
-  font-size: 1rem;
-  color: #cbd5e1; /* light gray is fine on dark bg */
-  margin-top: 0.25rem;
+    font-size: 1.15rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.5rem;
+    line-height: 1.6;
 }
 
-/* Section Titles */
+/* Section Titles (remain mostly same) */
 .capture-section h2,
 .recent-captures h2,
 .learn-section h2 {
-  color: #38bdf8; /* blue titles are good */
-  margin-bottom: 0.4rem;
-  border-bottom: 1px solid #334155;
-  padding-bottom: 3px;
+    color: var(--color-text-accent-blue);
+    margin-top: 0; /* Managed by parent gap */
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-border-light);
+    font-size: 2rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 8px rgba(100, 181, 246, 0.3);
 }
 
-/* Filter input */
-input[type="text"] {
-  width: 100%;
-  padding: 0.55rem;
-  margin: 0.4rem 0 0.9rem;
-  border-radius: 6px;
-  border: 1px solid #334155;
-  background-color: #0f172a;
-
-  color: white;  /* Change input text color to white for visibility */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* Filter group and input (remain same) */
+.filter-group {
+    margin-bottom: 1.5rem;
 }
 
-input[type="text"]:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 5px #3b82f6aa;
-  outline: none;
+.filter-group label {
+    display: block;
+    margin-bottom: 0.7rem;
+    font-weight: bold;
+    color: var(--color-text-accent-blue);
+    font-size: 1.05rem;
 }
 
-/* Disabled input */
-input[type="text"]:disabled {
-  background-color: #1e293b;
-  color: #94a3b8; /* light gray disabled color */
-  cursor: not-allowed;
+.filter-input-wrapper {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-/* Interface list checkboxes */
+.filter-input {
+    flex-grow: 1;
+    padding: 0.85rem;
+    border-radius: 10px;
+    border: 1px solid var(--color-input-border);
+    background-color: var(--color-input-bg);
+    color: var(--color-text-primary);
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.filter-input::placeholder {
+    color: var(--color-text-secondary);
+}
+
+.filter-input:focus {
+    border-color: var(--color-input-focus-border);
+    box-shadow: 0 0 10px rgba(100, 181, 246, 0.6);
+    outline: none;
+    background-color: #253350;
+}
+
+.filter-input.invalid-input {
+    border-color: var(--color-text-error);
+    box-shadow: 0 0 10px rgba(255, 82, 82, 0.6);
+}
+
+.error-message {
+    color: var(--color-text-error);
+    font-size: 0.95rem;
+    margin-top: 10px;
+    display: block;
+    font-weight: bold;
+}
+
+.hint {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    margin-top: 8px;
+    display: block;
+}
+
+/* Apply Filter Button (remain same) */
+.apply-filter-btn {
+    background-color: var(--color-button-secondary);
+    color: white;
+    padding: 0.85rem 1.7rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.05rem;
+    font-weight: bold;
+}
+
+.apply-filter-btn:hover:not(:disabled) {
+    background-color: var(--color-button-secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.apply-filter-btn:disabled {
+    background-color: var(--color-button-disabled);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Interface list checkboxes (remain same) */
+.interface-list-section {
+    margin-top: 2rem;
+}
+
+.interface-list-header {
+    font-weight: bold;
+    color: var(--color-text-accent-blue);
+    margin-bottom: 1.2rem;
+    font-size: 1.15rem;
+}
+
 .interface-list {
-  margin-bottom: 1.2rem;
+    background-color: var(--color-section-bg);
+    border-radius: 10px;
+    padding: 15px 20px;
+    border: 1px solid var(--color-border-light);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 }
 
 .interface-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.45rem;
-  gap: 0.5rem;
-  transition: background-color 0.3s ease;
-  border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--color-border-light);
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
 
-  color: white;  /* make checkbox label text white */
+.interface-item:last-child {
+    border-bottom: none;
 }
 
 .interface-item:hover {
-  background-color: #334155;
-  cursor: pointer;
+    background-color: var(--color-hover-item);
+    border-radius: 5px;
 }
 
-/* Buttons */
+.interface-item input[type="checkbox"] {
+    margin-right: 15px;
+    width: 22px;
+    height: 22px;
+    accent-color: var(--color-text-highlight);
+}
+
+.interface-item label {
+    flex-grow: 1;
+    font-size: 1.05rem;
+    color: var(--color-text-primary);
+}
+
+/* Traffic Indicator (remain same) */
+.traffic-indicator {
+    display: flex;
+    gap: 4px;
+    width: 80px;
+    justify-content: flex-end;
+    overflow: hidden;
+    height: 16px;
+    align-items: flex-end;
+}
+
+.traffic-bar {
+    width: 6px;
+    height: 100%;
+    background-color: var(--color-text-highlight);
+    border-radius: 3px;
+    animation: pulse-traffic 1.2s infinite alternate;
+    opacity: 0.2;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
+}
+
+@keyframes pulse-traffic {
+    0% {
+        opacity: 0.2;
+        transform: scaleY(0.2);
+    }
+    50% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+    100% {
+        opacity: 0.2;
+        transform: scaleY(0.2);
+    }
+}
+
+
+/* Action Buttons (remain same) */
 .actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-top: 1.3rem;
-  align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
 }
 
-/* Button styles remain the same since text is already white */
-button.primary {
-  background-color: #00b4d8;
-  border: none;
-  color: white;
-  padding: 0.7rem 1.4rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+.primary-btn, .secondary-btn {
+    padding: 1rem 2.2rem;
+    border-radius: 12px;
+    font-size: 1.15rem;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
 }
 
-button.primary:hover,
-button.primary:focus {
-  background-color: #0ea5e9;
-  outline: none;
-  box-shadow: 0 0 8px #0ea5e9aa;
+.primary-btn {
+    background-color: var(--color-button-primary);
 }
 
-button.secondary {
-  background-color: #475569;
-  border: none;
-  color: white;
-  padding: 0.7rem 1.4rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+.primary-btn:hover:not(:disabled) {
+    background-color: var(--color-button-primary-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px var(--color-shadow-highlight);
 }
 
-button.secondary:hover,
-button.secondary:focus {
-  background-color: #64748b;
-  outline: none;
-  box-shadow: 0 0 6px #64748baa;
+.primary-btn:disabled {
+    background-color: var(--color-button-disabled);
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
 }
 
-/* Disabled buttons */
-button:disabled {
-  background-color: #334155;
-  cursor: not-allowed;
-  opacity: 0.6;
+.secondary-btn {
+    background-color: var(--color-button-secondary);
 }
 
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.secondary-btn:hover:not(:disabled) {
+    background-color: var(--color-button-secondary-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px var(--color-shadow-accent);
+}
 
-  .welcome-header h1 {
-    font-size: 1.8rem;
-  }
+.file-name {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    color: var(--color-text-highlight);
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+}
 
-  .graph {
+/* Recent Captures (remain same) */
+.recent-captures-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: var(--color-section-bg);
+    border-radius: 10px;
+    border: 1px solid var(--color-border-light);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+
+.recent-capture-item {
+    padding: 12px 20px;
+    border-bottom: 1px dashed var(--color-border-light);
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.recent-capture-item:last-child {
+    border-bottom: none;
+}
+
+.recent-capture-item:hover {
+    background-color: var(--color-hover-item);
+    border-radius: 5px;
+}
+
+.no-captures {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    padding: 15px;
+    font-size: 1rem;
+}
+
+/* Learn & Support Section (remain same) */
+.learn-links {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.learn-link {
+    color: var(--color-text-accent-blue);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0 15px;
+    font-size: 1.05rem;
+    transition: all 0.2s ease;
+}
+
+.learn-link:hover {
+    color: var(--color-input-focus-border);
+    text-decoration: underline;
+    transform: translateY(-2px);
+}
+
+.contact {
+    text-align: center;
+    margin-top: 2rem;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.contact-label {
+    color: var(--color-text-accent-blue);
+    font-weight: bold;
+}
+
+.contact-email {
+    color: var(--color-text-highlight);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s ease;
+    font-size: 1.05rem;
+}
+
+.contact-email:hover {
+    color: var(--color-button-primary-hover);
+    text-decoration: underline;
+}
+
+.version {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--color-text-secondary);
     font-size: 0.95rem;
-  }
-
-  .welcome-page {
-    max-width: 95%;
-    margin: 1.5rem auto;
-    padding: 1rem 1.25rem;
-  }
 }
 
-/* Smooth transitions */
-button,
-input[type="text"],
-.interface-item {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0f172a;
-  border-radius: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #3b82f6;
-  border-radius: 6px;
-  border: 2px solid #0f172a;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #60a5fa;
-}
-
-/* Tooltip style */
-.tooltip {
-  position: relative;
-  cursor: help;
-  color: white; /* tooltip text white */
-}
-
-.tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #2563eb;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
-  white-space: nowrap;
-  font-size: 0.85rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 100;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-
-.tooltip:hover::after {
-  opacity: 1;
-}
-
-/* Utility classes */
-.mt-1 { margin-top: 0.25rem; }
-.mt-2 { margin-top: 0.5rem; }
-.mb-1 { margin-bottom: 0.25rem; }
-.mb-2 { margin-bottom: 0.5rem; }
-.text-center { text-align: center; } 
-
+/* Marquee Styles (remain same) */
 .marquee-container {
-  width: 100%;
-  overflow: hidden;
-  background-color: #0f172a; /* dark background for contrast */
-  padding: 8px 0;
-  border-top: 2px solid #38bdf8;
-  border-bottom: 2px solid #38bdf8;
-  margin-bottom: 20px;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--color-section-bg);
+    padding: 12px 0;
+    border-top: 2px solid var(--color-border-light);
+    border-bottom: 2px solid var(--color-border-light);
+    margin-bottom: 30px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 }
 
 .marquee-text {
-  display: inline-block;
-  white-space: nowrap;
-  color: #facc15; /* vibrant yellow */
-  font-size: 1.2rem;
-  font-weight: bold;
-  animation: scroll-left 15s linear infinite;
+    display: inline-block;
+    white-space: nowrap;
+    color: var(--color-text-accent-yellow);
+    font-size: 1.4rem;
+    font-weight: bolder;
+    animation: scroll-left 25s linear infinite;
+    padding: 0 30px;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
 }
 
 @keyframes scroll-left {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
 .marquee-text:hover {
-  animation-play-state: paused;
+    animation-play-state: paused;
 }
 
+/* Responsive tweaks for WelcomePage content */
+@media (max-width: 992px) {
+    .welcome-page {
+        padding: 2rem 2.5rem;
+    }
+    .welcome-header h1 {
+        font-size: 2.5rem;
+    }
+    .capture-section h2, .recent-captures h2, .learn-section h2 {
+        font-size: 1.8rem;
+    }
+    .marquee-text {
+        font-size: 1.25rem;
+        animation-duration: 30s;
+    }
+}
 
+@media (max-width: 768px) {
+    .welcome-page {
+        padding: 1.5rem 1.5rem;
+    }
+    .welcome-header h1 {
+        font-size: 2rem;
+    }
+    .marquee-text {
+        font-size: 1.1rem;
+        animation-duration: 35s;
+    }
+    .capture-section h2,
+    .recent-captures h2,
+    .learn-section h2 {
+        font-size: 1.5rem;
+    }
+    .actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .primary-btn, .secondary-btn, .apply-filter-btn {
+        width: 100%;
+    }
+    .filter-input-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .learn-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .learn-link {
+        padding: 5px 0;
+    }
+}
 
-@media (max-width: 300px) {
-  .marquee-text {
-    font-size: 1rem;
-    animation-duration: 18s;
-  }
+@media (max-width: 480px) {
+    .welcome-page {
+        padding: 1rem 1rem;
+        border-radius: 10px;
+    }
+    .welcome-header h1 {
+        font-size: 1.6rem;
+    }
+    .marquee-text {
+        font-size: 1rem;
+        animation-duration: 40s;
+    }
+    .capture-section h2,
+    .recent-captures h2,
+    .learn-section h2 {
+        font-size: 1.3rem;
+    }
+    .primary-btn, .secondary-btn, .apply-filter-btn {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+    .traffic-indicator {
+        width: 50px;
+        gap: 2px;
+    }
+    .traffic-bar {
+        width: 4px;
+    }
 }

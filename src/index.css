@@ -1,59 +1,56 @@
-/* Basic global styles */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
-  line-height: 1.6;
-  font-size: 16px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* src/index.css (or your main global CSS file) */
+
+/* General Body and Root Styles */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Important for sticky footer */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1A2A44 0%, #0D1B2A 100%); /* Full page background */
+    color: #E0E0E0; /* Default text color */
+    box-sizing: border-box;
 }
 
-/* Smooth scrolling behavior */
-html {
-  scroll-behavior: smooth;
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Make sure root takes full viewport height */
 }
 
-/* Basic styling for links */
-a {
-  color: #007bff;
-  text-decoration: none;
+/* Wrapper for content between header and footer */
+.main-content-wrapper {
+    flex-grow: 1; /* Allows main content to take available space */
+    width: 100%; /* Ensure it spans full width */
+    display: flex; /* Helps center content if needed */
+    justify-content: center; /* Center content horizontally */
+    align-items: flex-start; /* Align content to the top */
+    padding-top: 20px; /* Add some space below the sticky header */
+    padding-bottom: 20px; /* Add some space above the sticky footer */
+    box-sizing: border-box;
 }
 
-a:hover {
-  text-decoration: underline;
+/* Basic reset */
+* {
+    box-sizing: inherit;
 }
 
-/* Styling for form inputs */
-input, select, textarea, button {
-  font-family: inherit;
-  font-size: 1rem;
-  padding: 0.4rem 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-  transition: border-color 0.2s;
+/* Custom scrollbar (can be moved here from WelcomePage.css if desired to be global) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
 }
 
-input:focus, select:focus, textarea:focus {
-  border-color: #007bff;
+::-webkit-scrollbar-track {
+    background: #0D1B2A;
+    border-radius: 6px;
 }
 
-/* Dark mode support (when class is applied to <body>) */
-body.dark-mode {
-  background-color: #121212;
-  color: #f5f5f5;
+::-webkit-scrollbar-thumb {
+    background-color: #2196F3; /* Blue scrollbar */
+    border-radius: 6px;
+    border: 2px solid #0D1B2A;
 }
 
-body.dark-mode input,
-body.dark-mode select,
-body.dark-mode textarea {
-  background-color: #1e1e1e;
-  color: #fff;
-  border: 1px solid #444;
-}
-
-body.dark-mode a {
-  color: #66aaff;
+::-webkit-scrollbar-thumb:hover {
+    background-color: #42A5F5;
 }

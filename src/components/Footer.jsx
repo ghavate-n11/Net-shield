@@ -1,10 +1,11 @@
 // src/components/Footer.jsx
 import React from 'react';
+import './Footer.css'; // Import the CSS file
 
 export default function Footer() {
   return (
-    <footer style={{ padding: '1rem', background: '#eee', marginTop: '2rem', textAlign: 'center' }}>
-      <p>&copy; 2025 NetShield. All rights reserved.</p>
+    <footer className="app-footer"> {/* Use the class name */}
+      <p>&copy; 2025 Net Shield. All rights reserved.</p>
     </footer>
   );
 }

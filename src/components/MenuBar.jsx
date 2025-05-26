@@ -341,17 +341,11 @@ cursor: 'pointer',
       <p><strong>Version:</strong>  Net Shield v1.0.0</p>
    <p><strong>Domain:</strong> Cybersecurity / Network Security</p>
 
-      <p><strong>Developed By:</strong> Nilesh Ghavate (MCA Student)</p>
-      <p><strong>College:</strong> SVERI's College of Engineering, Pandharpur</p>
-      <p><strong>Department:</strong> MCA Second Year</p>
-      <p><strong>University:</strong> Punyashlok Ahilyadevi Holkar Solapur University</p>
+   <p><strong>Developed By:</strong> Nilesh B. Ghavate (MCA Final Year, SVERI's COE, Pandharpur [PAH Solapur University, Solapur])</p>
 
-      <p>
-  <strong>Project Purpose:</strong> Net Shield is a web-based network packet capturing tool designed to help users monitor and analyze network traffic for troubleshooting and security auditing. 
+      <p><strong>Project Purpose:</strong> Net Shield is a web-based network packet capturing tool designed to help users monitor and analyze network traffic for troubleshooting and security auditing. 
   It is useful for identifying suspicious activity, diagnosing network issues, ensuring compliance with security policies, and gaining insights into network performance.
 </p>
-
-
       <p><strong>Key Features:</strong></p>
       <ul style={{ textAlign: 'left', margin: '0 auto', maxWidth: '90%' }}>
         <li>Capture and display real-time network packets.</li>

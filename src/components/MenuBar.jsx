@@ -295,8 +295,6 @@ cursor: 'pointer',
       e.target.value = '';
     }}
   />
-
-      {/* About Dialog */}
 {showAbout && (
   <div
     role="dialog"
@@ -313,6 +311,7 @@ cursor: 'pointer',
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 2000,
+      padding: '20px',
     }}
     onClick={() => setShowAbout(false)}
   >
@@ -321,31 +320,40 @@ cursor: 'pointer',
       style={{
         backgroundColor: '#fff',
         color: '#000',
-        padding: '20px',
-        borderRadius: '8px',
-        maxWidth: '400px',
+        padding: '25px',
+        borderRadius: '12px',
+        maxWidth: '600px',
+        width: '100%',
         textAlign: 'center',
-        boxShadow: '0 4px 10px rgba(0,0,0,0.25)',
+        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+        overflowY: 'auto',
+        maxHeight: '90vh',
       }}
     >
       {/* Project Logo */}
       <img
-        src="src/assets/Logo.png" // Replace with your image path
+        src="src/assets/Logo.png"
         alt="NetShield Logo"
-        style={{ width: '120px', marginBottom: '15px', borderRadius: '8px' }}
+        style={{ width: '100px', marginBottom: '10px', borderRadius: '8px' }}
       />
 
-      <h2 id="about-title">About NetShield</h2>
-      <p><strong>Version:</strong> 1.0.0</p>
-      <p><strong>Developed By:</strong> Nilesh Ghavate (MCA Student)</p>
-      <p><strong>College Name:</strong> SVERI's College of Engineering, Pandharpur</p>
-      <p><strong>Department:</strong> MCA Second Year</p>
-      <p><strong>University:</strong> Punyashlok Ahilyadevi Holkar Solapur University, Solapur</p>
+      <h2 id="about-title">About Net Shield</h2>
+      <p><strong>Version:</strong>  Net Shield v1.0.0</p>
+   <p><strong>Domain:</strong> Cybersecurity / Network Security</p>
 
-      <p><strong>Project Purpose:</strong> Net Shield is a web-based network packet capturing tool designed to help users monitor and analyze network traffic for troubleshooting and security auditing.</p>
+      <p><strong>Developed By:</strong> Nilesh Ghavate (MCA Student)</p>
+      <p><strong>College:</strong> SVERI's College of Engineering, Pandharpur</p>
+      <p><strong>Department:</strong> MCA Second Year</p>
+      <p><strong>University:</strong> Punyashlok Ahilyadevi Holkar Solapur University</p>
+
+      <p>
+  <strong>Project Purpose:</strong> Net Shield is a web-based network packet capturing tool designed to help users monitor and analyze network traffic for troubleshooting and security auditing. 
+  It is useful for identifying suspicious activity, diagnosing network issues, ensuring compliance with security policies, and gaining insights into network performance.
+</p>
+
 
       <p><strong>Key Features:</strong></p>
-      <ul style={{ paddingLeft: '20px' }}>
+      <ul style={{ textAlign: 'left', margin: '0 auto', maxWidth: '90%' }}>
         <li>Capture and display real-time network packets.</li>
         <li>Start and stop capturing sessions easily.</li>
         <li>Save captured data for offline analysis.</li>
@@ -353,50 +361,101 @@ cursor: 'pointer',
       </ul>
 
       <p><strong>Technologies Used:</strong></p>
-      <ul style={{ paddingLeft: '20px' }}>
+      <ul style={{ textAlign: 'left', margin: '0 auto', maxWidth: '90%' }}>
         <li>React.js for frontend UI development.</li>
-        <li>Spring Boot (Java framework) for backend APIs and logic.</li>
-        <li>MySQL for data storage and management.</li>
-        <li>Nmap tool for capturing live network packets.</li>
-        <li>Inspired by Wireshark tool.</li>
+        <li>Spring Boot for backend APIs.</li>
+        <li>MySQL for database management.</li>
+        <li>Nmap tool for packet capture.</li>
+        <li>Inspired by Wireshark.</li>
       </ul>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
-        <a
-          href="https://github.com/ghavate-n11"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="GitHub Profile"
-        >
-          <Github />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/nileshghavate-203b27251/"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn Profile"
-        >
-          <Linkedin />
-        </a>
+      {/* Developer Photo */}
+      <img
+        src="src/assets/images/Screenshot 2025-05-10 181434.png"
+        alt="Developer"
+        style={{
+          width: '90px',
+          height: '90px',
+          borderRadius: '50%',
+          marginBottom: '10px',
+          objectFit: 'cover',
+          border: '2px solid #222',
+        }}
+      />
+
+      {/* Name & Role */}
+      <div style={{ marginBottom: '15px' }}>
+        <h3 style={{ margin: '5px 0' }}>Nilesh Ghavate</h3>
+        <p style={{ margin: 0, fontWeight: '500', color: '#555' }}>
+          Java Full Stack Developer Intern
+        </p>
       </div>
 
+    {/* Social Links */}
+<div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
+  {/* GitHub Image Link */}
+  <a
+    href="https://github.com/ghavate-n11"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="GitHub Profile"
+  >
+    <img
+      src="src/assets/images/github.png" // Path to your GitHub image
+      alt="GitHub"
+      style={{ width: '28px', height: '28px' }}
+    />
+  </a>
+
+  {/* LinkedIn Image Link */}
+  <a
+    href="https://www.linkedin.com/in/nileshghavate-203b27251/"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="LinkedIn Profile"
+  >
+    <img
+      src="src/assets/images/linkedin.png" // Path to your LinkedIn image
+      alt="LinkedIn"
+      style={{ width: '28px', height: '28px' }}
+    />
+  </a>
+
+  {/* HackerRank Image Link */}
+  <a
+    href="https://www.hackerrank.com/profile/nileshghavate11"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="HackerRank Profile"
+  >
+    <img
+      src="src/assets/images/HackerRank_Icon-1000px.png"
+      alt="HackerRank"
+      style={{ width: '28px', height: '28px' }}
+    />
+  </a>
+</div>
+
+      {/* Close Button */}
       <button
         onClick={() => setShowAbout(false)}
         style={{
-          marginTop: '20px',
-          padding: '8px 16px',
+          marginTop: '25px',
+          padding: '10px 20px',
           backgroundColor: '#222',
           color: '#fff',
           border: 'none',
-          borderRadius: '4px',
+          borderRadius: '6px',
           cursor: 'pointer',
         }}
       >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 };

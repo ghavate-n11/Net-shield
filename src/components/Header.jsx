@@ -19,7 +19,7 @@ const Header = () => {
           alt="NetShield Logo"
           style={{ width: '40px', height: '40px', borderRadius: '8px' }}
         />
-        <h1 style={{ fontSize: "1.25rem", margin: 0 }}>Net Shield</h1>
+        <h1 style={{ fontSize: "1.25rem", margin: 0 }}>NET SHIELD</h1>
       </div>
 
       <nav>

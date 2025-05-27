@@ -1,3 +1,4 @@
+// src/components/SipFlows.jsx
 import React, { useState, useEffect } from 'react';
 
 // Updated dummy data for SIP call flows with new names and emails
@@ -84,7 +85,7 @@ const SipFlows = () => {
       padding: '20px',
       minHeight: 'calc(100vh - 40px)', // Adjust for potential overall padding
       overflowY: 'auto',
-      boxSizing: 'border-box', // Include padding in element's total width and height
+      boxSizing: 'border-box',
     },
     header: {
       color: '#ADD8E6', // Light blue for headers
@@ -100,7 +101,7 @@ const SipFlows = () => {
       borderRadius: '4px',
       marginBottom: '20px',
       width: '300px',
-      outline: 'none', // Remove default focus outline
+      outline: 'none',
     },
     tableContainer: {
       overflowX: 'auto',
@@ -123,17 +124,17 @@ const SipFlows = () => {
     td: {
       padding: '10px',
       border: '1px solid #444',
-      whiteSpace: 'nowrap', // Prevent text wrapping
+      whiteSpace: 'nowrap',
     },
-    tableRowBase: { // Base style for table rows
+    tableRowBase: {
       cursor: 'pointer',
-      transition: 'background-color 0.2s ease', // Smooth transition for hover
+      transition: 'background-color 0.2s ease',
     },
-    tableRowHover: { // Hover style (will be applied via JS event)
-      backgroundColor: '#4a4a4a', // Darker on hover
+    tableRowHover: {
+      backgroundColor: '#4a4a4a',
     },
     selectedRow: {
-      backgroundColor: '#6a5acd', // Slate Blue for selected row
+      backgroundColor: '#6a5acd',
       color: '#fff',
     },
     detailsSection: {
@@ -158,15 +159,15 @@ const SipFlows = () => {
       marginBottom: '5px',
       borderRadius: '4px',
       display: 'flex',
-      flexDirection: 'row', // Arrange items in a row
-      flexWrap: 'wrap', // Allow wrapping
-      gap: '15px', // Space between items
-      justifyContent: 'flex-start', // Align items to the start
-      alignItems: 'center', // Vertically align items
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: '15px',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
     },
     messageProp: {
       fontWeight: 'bold',
-      color: '#ADD8E6', // Light blue for property names
+      color: '#ADD8E6',
     },
     closeButton: {
       backgroundColor: '#6a5acd',
@@ -176,9 +177,9 @@ const SipFlows = () => {
       borderRadius: '4px',
       cursor: 'pointer',
       marginTop: '15px',
-      transition: 'background-color 0.2s ease', // Smooth transition
+      transition: 'background-color 0.2s ease',
     },
-    closeButtonHover: { // Hover style for button (will be applied via JS event)
+    closeButtonHover: {
       backgroundColor: '#7b68ee',
     },
   };
@@ -234,27 +235,23 @@ const SipFlows = () => {
                   key={call.id}
                   onClick={() => handleCallClick(call)}
                   style={{
-                    ...styles.tableRowBase, // Apply base row styles
-                    ...(selectedCall && selectedCall.id === call.id ? styles.selectedRow : {}),
-                    // If not selected, inherit default background, else take selected row color
+                    ...styles.tableRowBase,
                     backgroundColor: (selectedCall && selectedCall.id === call.id)
                       ? styles.selectedRow.backgroundColor
-                      : styles.table.backgroundColor, // Ensure background reverts if unselected
+                      : styles.table.backgroundColor,
                   }}
                   onMouseEnter={(e) => {
-                    // Apply hover only if not the currently selected row
                     if (!(selectedCall && selectedCall.id === call.id)) {
                       e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor;
                     }
                   }}
                   onMouseLeave={(e) => {
-                    // Revert from hover only if not the currently selected row
                     if (!(selectedCall && selectedCall.id === call.id)) {
-                      e.currentTarget.style.backgroundColor = styles.table.backgroundColor; // Revert to table's base background
+                      e.currentTarget.style.backgroundColor = styles.table.backgroundColor;
                     }
                   }}
                 >
-                  <td style={styles.td}>{call.callId.substring(0, 15)}...</td> {/* Shorten for display */}
+                  <td style={styles.td}>{call.callId.substring(0, 15)}...</td>
                   <td style={styles.td}>{call.fromUser}</td>
                   <td style={styles.td}>{call.toUser}</td>
                   <td style={styles.td}>{call.startTime}</td>

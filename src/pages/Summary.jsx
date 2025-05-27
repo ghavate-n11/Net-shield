@@ -16,15 +16,22 @@ export default function Summary({ packets }) {
     const totalLength = packets.reduce((sum, pkt) => sum + (pkt.length || 0), 0);
     const averageLength = total > 0 ? (totalLength / total).toFixed(2) : 0;
 
-    // Simple bandwidth estimation (highly simplified for simulation)
-    // Assuming 1.5 seconds interval between packets in simulation
-    // A more accurate way would be to use timestamps.
-    const duration = packets.length > 1 ? (packets.length - 1) * 1.5 : 0; // Rough duration in seconds
-    const totalBytes = totalLength; // For simplicity, using packet length as bytes
+    // Bandwidth estimation using timestamps for real-time capture
+    let duration = 0;
+    if (total > 1) {
+        // Assuming packets are sorted by timestamp, or find min/max
+        const firstPacketTime = packets[0].timestamp;
+        const lastPacketTime = packets[total - 1].timestamp;
+        duration = (lastPacketTime - firstPacketTime) / 1000; // Duration in seconds
+    }
 
-    // If simulating real capture with timestamps, use actual min/max timestamps
-    // For now, let's assume all packets are within a fixed timeframe if `duration` is 0.
-    const throughputMbps = duration > 0 ? ((totalBytes * 8) / (duration * 1024 * 1024)).toFixed(2) : 0;
+    const totalBytes = totalLength;
+
+    // Throughput in Mbps (Megabits per second)
+    // totalBytes * 8 converts bytes to bits
+    // duration converts milliseconds (if timestamp is in ms) to seconds
+    // 1024 * 1024 converts bits to Megabits
+    const throughputMbps = duration > 0 ? ((totalBytes * 8) / (duration * 1000 * 1000)).toFixed(2) : 0;
 
 
     return (

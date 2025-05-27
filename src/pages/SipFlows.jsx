@@ -1,54 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-// Dummy data for SIP call flows
+// Updated dummy data for SIP call flows with new names and emails
 const dummySipCalls = [
   {
-    id: 'call-001',
-    callId: 'j8d9c7s@192.168.1.10',
-    fromUser: 'Alice <sip:alice@example.com>',
-    toUser: 'Bob <sip:bob@example.com>',
-    startTime: '2025-05-26 14:30:00',
+    id: 'call-ax7yt8z',
+    callId: 'ax7yt8z@pbx.corporate.com',
+    fromUser: 'Pranav <sip:pranav@corporate.com>',
+    toUser: 'Divya <sip:divya@corporate.com>',
+    startTime: '2025-05-27 09:00:00',
     status: 'Completed',
-    duration: '120s',
+    duration: '90s',
     messages: [
-      { id: 1, timeOffset: '0.000', source: '192.168.1.10', destination: 'sip.example.com', method: 'INVITE', cseq: '1 INVITE', status: 'N/A', info: 'Alice to Bob' },
-      { id: 2, timeOffset: '0.050', source: 'sip.example.com', destination: '192.168.1.10', method: '100 Trying', cseq: '1 INVITE', status: 'N/A', info: '' },
-      { id: 3, timeOffset: '1.500', source: 'sip.example.com', destination: '192.168.1.10', method: '180 Ringing', cseq: '1 INVITE', status: 'N/A', info: '' },
-      { id: 4, timeOffset: '5.200', source: 'sip.example.com', destination: '192.168.1.10', method: '200 OK', cseq: '1 INVITE', status: 'N/A', info: 'SDP' },
-      { id: 5, timeOffset: '5.250', source: '192.168.1.10', destination: 'sip.example.com', method: 'ACK', cseq: '1 ACK', status: 'N/A', info: '' },
-      { id: 6, timeOffset: '125.000', source: '192.168.1.10', destination: 'sip.example.com', method: 'BYE', cseq: '2 BYE', status: 'N/A', info: '' },
-      { id: 7, timeOffset: '125.050', source: 'sip.example.com', destination: '192.168.1.10', method: '200 OK', cseq: '2 BYE', status: 'N/A', info: '' },
+      { id: 1, timeOffset: '0.000', source: '10.0.0.100', destination: 'pbx.corporate.com', method: 'INVITE', cseq: '1 INVITE', status: 'N/A', info: 'Pranav calling Divya' },
+      { id: 2, timeOffset: '0.045', source: 'pbx.corporate.com', destination: '10.0.0.100', method: '100 Trying', cseq: '1 INVITE', status: 'N/A', info: '' },
+      { id: 3, timeOffset: '1.200', source: 'pbx.corporate.com', destination: '10.0.0.100', method: '180 Ringing', cseq: '1 INVITE', status: 'N/A', info: '' },
+      { id: 4, timeOffset: '4.500', source: 'pbx.corporate.com', destination: '10.0.0.100', method: '200 OK', cseq: '1 INVITE', status: 'N/A', info: 'SDP from Divya' },
+      { id: 5, timeOffset: '4.580', source: '10.0.0.100', destination: 'pbx.corporate.com', method: 'ACK', cseq: '1 ACK', status: 'N/A', info: '' },
+      { id: 6, timeOffset: '94.000', source: '10.0.0.100', destination: 'pbx.corporate.com', method: 'BYE', cseq: '2 BYE', status: 'N/A', info: '' },
+      { id: 7, timeOffset: '94.030', source: 'pbx.corporate.com', destination: '10.0.0.100', method: '200 OK', cseq: '2 BYE', status: 'N/A', info: '' },
     ],
   },
   {
-    id: 'call-002',
-    callId: 'f7e2p9a@10.0.0.5',
-    fromUser: 'Charlie <sip:charlie@other.org>',
-    toUser: 'Dave <sip:dave@other.org>',
-    startTime: '2025-05-26 15:05:00',
-    status: 'Failed (404 Not Found)',
-    duration: '5s',
+    id: 'call-wq2bn3m',
+    callId: 'wq2bn3m@voip.service.net',
+    fromUser: 'Rahul <sip:rahul.s@service.net>',
+    toUser: 'Priya <sip:priya.k@service.net>',
+    startTime: '2025-05-27 10:15:30',
+    status: 'Failed (480 Temporarily Unavailable)',
+    duration: '7s',
     messages: [
-      { id: 1, timeOffset: '0.000', source: '10.0.0.5', destination: 'sip.other.org', method: 'INVITE', cseq: '1 INVITE', status: 'N/A', info: 'Charlie to Dave' },
-      { id: 2, timeOffset: '0.100', source: 'sip.other.org', destination: '10.0.0.5', method: '404 Not Found', cseq: '1 INVITE', status: 'N/A', info: '' },
-      { id: 3, timeOffset: '0.150', source: '10.0.0.5', destination: 'sip.other.org', method: 'ACK', cseq: '1 ACK', status: 'N/A', info: '' },
+      { id: 1, timeOffset: '0.000', source: '192.168.5.50', destination: 'voip.service.net', method: 'INVITE', cseq: '1 INVITE', status: 'N/A', info: 'Rahul to Priya' },
+      { id: 2, timeOffset: '0.090', source: 'voip.service.net', destination: '192.168.5.50', method: '480 Temporarily Unavailable', cseq: '1 INVITE', status: 'N/A', info: 'User busy or unreachable' },
+      { id: 3, timeOffset: '0.140', source: '192.168.5.50', destination: 'voip.service.net', method: 'ACK', cseq: '1 ACK', status: 'N/A', info: '' },
     ],
   },
   {
-    id: 'call-003',
-    callId: 'x1y2z3a@172.16.0.1',
-    fromUser: 'Eve <sip:eve@domain.net>',
-    toUser: 'Frank <sip:frank@domain.net>',
-    startTime: '2025-05-26 16:10:00',
-    status: 'Completed',
-    duration: '60s',
+    id: 'call-lp8ko9q',
+    callId: 'lp8ko9q@cloud.comm.org',
+    fromUser: 'Sneha <sip:sneha.j@cloud.comm.org>',
+    toUser: 'Amit <sip:amit.v@cloud.comm.org>',
+    startTime: '2025-05-27 11:40:10',
+    status: 'In-Progress',
+    duration: '35s', // Still ongoing
     messages: [
-      { id: 1, timeOffset: '0.000', source: '172.16.0.1', destination: 'proxy.domain.net', method: 'INVITE', cseq: '1 INVITE', status: 'N/A', info: 'Eve to Frank' },
-      { id: 2, timeOffset: '0.030', source: 'proxy.domain.net', destination: '172.16.0.1', method: '100 Trying', cseq: '1 INVITE', status: 'N/A', info: '' },
-      { id: 3, timeOffset: '0.500', source: 'proxy.domain.net', destination: '172.16.0.1', method: '200 OK', cseq: '1 INVITE', status: 'N/A', info: 'SDP' },
-      { id: 4, timeOffset: '0.550', source: '172.16.0.1', destination: 'proxy.domain.net', method: 'ACK', cseq: '1 ACK', status: 'N/A', info: '' },
-      { id: 5, timeOffset: '60.000', source: '172.16.0.1', destination: 'proxy.domain.net', method: 'CANCEL', cseq: '2 CANCEL', status: 'N/A', info: '' },
-      { id: 6, timeOffset: '60.020', source: 'proxy.domain.net', destination: '172.16.0.1', method: '200 OK', cseq: '2 CANCEL', status: 'N/A', info: '' },
+      { id: 1, timeOffset: '0.000', source: '172.20.1.1', destination: 'cloud.comm.org', method: 'INVITE', cseq: '1 INVITE', status: 'N/A', info: 'Sneha to Amit' },
+      { id: 2, timeOffset: '0.025', source: 'cloud.comm.org', destination: '172.20.1.1', method: '100 Trying', cseq: '1 INVITE', status: 'N/A', info: '' },
+      { id: 3, timeOffset: '0.400', source: 'cloud.comm.org', destination: '172.20.1.1', method: '200 OK', cseq: '1 INVITE', status: 'N/A', info: 'SDP' },
+      { id: 4, timeOffset: '0.450', source: '172.20.1.1', destination: 'cloud.comm.org', method: 'ACK', cseq: '1 ACK', status: 'N/A', info: '' },
+      // Call is still in progress, so no BYE yet
+    ],
+  },
+  {
+    id: 'call-zx1cv2b',
+    callId: 'zx1cv2b@branch.office.com',
+    fromUser: 'Anjali <sip:anjali@branch.office.com>',
+    toUser: 'Vikram <sip:vikram@main.office.com>',
+    startTime: '2025-05-27 13:00:00',
+    status: 'Completed',
+    duration: '180s',
+    messages: [
+      { id: 1, timeOffset: '0.000', source: '192.168.20.5', destination: 'proxy.main.office.com', method: 'INVITE', cseq: '1 INVITE', status: 'N/A', info: 'Anjali to Vikram' },
+      { id: 2, timeOffset: '0.070', source: 'proxy.main.office.com', destination: '192.168.20.5', method: '100 Trying', cseq: '1 INVITE', status: 'N/A', info: '' },
+      { id: 3, timeOffset: '1.100', source: 'proxy.main.office.com', destination: '192.168.20.5', method: '183 Session Progress', cseq: '1 INVITE', status: 'N/A', info: 'Early Media' },
+      { id: 4, timeOffset: '6.000', source: 'proxy.main.office.com', destination: '192.168.20.5', method: '200 OK', cseq: '1 INVITE', status: 'N/A', info: 'SDP' },
+      { id: 5, timeOffset: '6.050', source: '192.168.20.5', destination: 'proxy.main.office.com', method: 'ACK', cseq: '1 ACK', status: 'N/A', info: '' },
+      { id: 6, timeOffset: '186.000', source: '192.168.20.5', destination: 'proxy.main.office.com', method: 'BYE', cseq: '2 BYE', status: 'N/A', info: '' },
+      { id: 7, timeOffset: '186.030', source: 'proxy.main.office.com', destination: '192.168.20.5', method: '200 OK', cseq: '2 BYE', status: 'N/A', info: '' },
     ],
   },
 ];
@@ -65,8 +82,9 @@ const SipFlows = () => {
       color: '#e0e0e0', // Light text
       fontFamily: 'Consolas, Monaco, monospace', // Monospaced font
       padding: '20px',
-      minHeight: 'calc(100vh - 120px)', // Adjust for header/footer
+      minHeight: 'calc(100vh - 40px)', // Adjust for potential overall padding
       overflowY: 'auto',
+      boxSizing: 'border-box', // Include padding in element's total width and height
     },
     header: {
       color: '#ADD8E6', // Light blue for headers
@@ -82,6 +100,7 @@ const SipFlows = () => {
       borderRadius: '4px',
       marginBottom: '20px',
       width: '300px',
+      outline: 'none', // Remove default focus outline
     },
     tableContainer: {
       overflowX: 'auto',
@@ -98,21 +117,23 @@ const SipFlows = () => {
       padding: '10px',
       textAlign: 'left',
       border: '1px solid #444',
-      cursor: 'pointer', // Indicate sortable (if implemented)
+      cursor: 'pointer',
+      whiteSpace: 'nowrap',
     },
     td: {
       padding: '10px',
       border: '1px solid #444',
       whiteSpace: 'nowrap', // Prevent text wrapping
     },
-    tableRowHover: {
+    tableRowBase: { // Base style for table rows
       cursor: 'pointer',
-      '&:hover': {
-        backgroundColor: '#4a4a4a', // Darker on hover
-      },
+      transition: 'background-color 0.2s ease', // Smooth transition for hover
+    },
+    tableRowHover: { // Hover style (will be applied via JS event)
+      backgroundColor: '#4a4a4a', // Darker on hover
     },
     selectedRow: {
-      backgroundColor: '#6a5acd !important', // Slate Blue for selected row
+      backgroundColor: '#6a5acd', // Slate Blue for selected row
       color: '#fff',
     },
     detailsSection: {
@@ -137,8 +158,11 @@ const SipFlows = () => {
       marginBottom: '5px',
       borderRadius: '4px',
       display: 'flex',
-      gap: '10px',
-      flexWrap: 'wrap',
+      flexDirection: 'row', // Arrange items in a row
+      flexWrap: 'wrap', // Allow wrapping
+      gap: '15px', // Space between items
+      justifyContent: 'flex-start', // Align items to the start
+      alignItems: 'center', // Vertically align items
     },
     messageProp: {
       fontWeight: 'bold',
@@ -152,9 +176,10 @@ const SipFlows = () => {
       borderRadius: '4px',
       cursor: 'pointer',
       marginTop: '15px',
-      '&:hover': {
-        backgroundColor: '#7b68ee',
-      },
+      transition: 'background-color 0.2s ease', // Smooth transition
+    },
+    closeButtonHover: { // Hover style for button (will be applied via JS event)
+      backgroundColor: '#7b68ee',
     },
   };
 
@@ -179,12 +204,12 @@ const SipFlows = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.header}>SIP Flows</h2>
-      <p>Analyze SIP (Session Initiation Protocol) call setup, modification, and teardown flows.</p>
+      <h2 style={styles.header}>SIP Flows Analyzer</h2>
+      <p>Analyze Session Initiation Protocol (SIP) call setup, modification, and teardown flows.</p>
 
       <input
         type="text"
-        placeholder="Filter calls..."
+        placeholder="Filter calls (e.g., name, IP, status)..."
         value={filterText}
         onChange={(e) => setFilterText(e.target.value)}
         style={styles.filterInput}
@@ -209,12 +234,27 @@ const SipFlows = () => {
                   key={call.id}
                   onClick={() => handleCallClick(call)}
                   style={{
-                    ...styles.td,
-                    ...styles.tableRowHover,
+                    ...styles.tableRowBase, // Apply base row styles
                     ...(selectedCall && selectedCall.id === call.id ? styles.selectedRow : {}),
+                    // If not selected, inherit default background, else take selected row color
+                    backgroundColor: (selectedCall && selectedCall.id === call.id)
+                      ? styles.selectedRow.backgroundColor
+                      : styles.table.backgroundColor, // Ensure background reverts if unselected
+                  }}
+                  onMouseEnter={(e) => {
+                    // Apply hover only if not the currently selected row
+                    if (!(selectedCall && selectedCall.id === call.id)) {
+                      e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    // Revert from hover only if not the currently selected row
+                    if (!(selectedCall && selectedCall.id === call.id)) {
+                      e.currentTarget.style.backgroundColor = styles.table.backgroundColor; // Revert to table's base background
+                    }
                   }}
                 >
-                  <td style={styles.td}>{call.callId.substring(0, 10)}...</td> {/* Shorten for display */}
+                  <td style={styles.td}>{call.callId.substring(0, 15)}...</td> {/* Shorten for display */}
                   <td style={styles.td}>{call.fromUser}</td>
                   <td style={styles.td}>{call.toUser}</td>
                   <td style={styles.td}>{call.startTime}</td>
@@ -224,7 +264,7 @@ const SipFlows = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="6" style={{ ...styles.td, textAlign: 'center', color: '#aaa' }}>No SIP call flows found.</td>
+                <td colSpan="6" style={{ ...styles.td, textAlign: 'center', color: '#aaa' }}>No SIP call flows found matching your filter.</td>
               </tr>
             )}
           </tbody>
@@ -233,10 +273,16 @@ const SipFlows = () => {
 
       {selectedCall && (
         <div style={styles.detailsSection}>
-          <h3 style={styles.detailsHeader}>SIP Call Flow Details for {selectedCall.callId.substring(0, 20)}...</h3>
-          <p><strong>From:</strong> {selectedCall.fromUser} <strong>To:</strong> {selectedCall.toUser}</p>
-          <p><strong>Call ID:</strong> {selectedCall.callId}</p>
-          <p><strong>Status:</strong> {selectedCall.status} <strong>Duration:</strong> {selectedCall.duration}</p>
+          <h3 style={styles.detailsHeader}>SIP Call Flow Details: {selectedCall.callId.substring(0, 25)}...</h3>
+          <p>
+            <strong>From:</strong> {selectedCall.fromUser} <br/>
+            <strong>To:</strong> {selectedCall.toUser}
+          </p>
+          <p>
+            <strong>Full Call ID:</strong> {selectedCall.callId} <br/>
+            <strong>Start Time:</strong> {selectedCall.startTime} <br/>
+            <strong>Status:</strong> {selectedCall.status} &nbsp; <strong>Duration:</strong> {selectedCall.duration}
+          </p>
 
           <h4 style={{ ...styles.detailsHeader, marginTop: '20px' }}>Message Sequence:</h4>
           <ul style={styles.messageList}>
@@ -251,13 +297,12 @@ const SipFlows = () => {
               </li>
             ))}
           </ul>
-          {/* In a real Wireshark-like tool, you'd have options for:
-              - Flow Diagram (requires a charting library like D3.js or custom SVG drawing)
-              - Playback (if associated with RTP)
-              - Export Messages
-              - More detailed message content on click
-          */}
-          <button onClick={closeDetails} style={styles.closeButton}>
+          <button
+            onClick={closeDetails}
+            style={styles.closeButton}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = styles.closeButtonHover.backgroundColor)}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = styles.closeButton.backgroundColor)}
+          >
             Close Details
           </button>
         </div>

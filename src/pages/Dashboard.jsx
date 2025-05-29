@@ -366,12 +366,12 @@ const Dashboard = () => {
       destination: '192.168.1.1',
       protocol: 'DNS',
       length: 80,
-      info: 'DNS Standard query 0x1234 A example.com',
+      info: 'DNS Standard query 0x1234 A google.com',
       details: {
         ethernet: { src_mac: '00:11:22:33:44:55', dst_mac: 'AA:BB:CC:DD:EE:FF', type: 'IPv4' },
         ip: { version: 4, src_ip: '192.168.1.100', dst_ip: '192.168.1.1', protocol: 'UDP' },
         udp: { src_port: 53456, dst_port: 53 },
-        dns: { query: 'example.com', type: 'A' },
+        dns: { query: 'google.com', type: 'A' },
       },
     },
     {
@@ -428,7 +428,7 @@ const Dashboard = () => {
       details: {
         ethernet: '...',
         ip: { src_ip: '192.168.1.100', dst_ip: '203.0.113.45', protocol: 'TCP' },
-        http: { method: 'GET', path: '/api/data', host: 'api.example.com' },
+        http: { method: 'GET', path: '/api/data', host: 'api.google.com' },
       },
     },
     {

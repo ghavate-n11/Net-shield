@@ -11,7 +11,7 @@ const Ribbon = ({ filter, onFilterChange, onStart, onStop, onReload, isCapturing
       alignItems: 'center',
       gap: '1rem',
       color: '#a3d9ff',
-      boxShadow: '0 0 5px #00aaff',
+      boxShadow: '0 0 5pxrgb(184, 112, 19)',
       fontFamily: 'Arial, sans-serif',
     }}
   >

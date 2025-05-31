@@ -344,7 +344,7 @@ const MenuBar = () => {
   );
 
   return (
-    <div style={{ fontFamily: 'Segoe UI', backgroundColor: '#f0f0f0', color: '#333', minHeight: '100vh' }}>
+    <div style={styles.menuContainer}>
       {/* Menu Bar */}
       <div
         ref={menuBarRef}
@@ -352,15 +352,7 @@ const MenuBar = () => {
         tabIndex={0}
         role="menubar"
         aria-label="Application menu"
-        style={{
-          userSelect: 'none',
-          backgroundColor: '#222',
-          color: '#eee',
-          display: 'flex',
-          padding: '5px 10px',
-          boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-          zIndex: 1000,
-        }}
+        style={styles.menuBar}
       >
         {menuStructure.map((menu, idx) => (
           <div
@@ -372,11 +364,8 @@ const MenuBar = () => {
             aria-expanded={openMenuIndex === idx}
             tabIndex={openMenuIndex === idx ? 0 : -1}
             style={{
-              padding: '5px 10px',
-              cursor: 'pointer',
-              backgroundColor: openMenuIndex === idx ? '#444' : 'transparent',
-              position: 'relative',
-              outline: 'none', // Remove default outline
+              ...styles.menuItem,
+              ...(openMenuIndex === idx ? styles.menuItemActive : {}),
             }}
           >
             {menu.label}
@@ -384,20 +373,7 @@ const MenuBar = () => {
               <ul
                 role="menu"
                 aria-label={`${menu.label} submenu`}
-                style={{
-                  listStyle: 'none',
-                  margin: 0,
-                  padding: '5px 0',
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  backgroundColor: '#333',
-                  border: '1px solid #555',
-                  minWidth: '180px',
-                  zIndex: 1000,
-                  boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
-                  borderRadius: '4px',
-                }}
+                style={styles.submenu}
               >
                 {menu.submenu.map((item, subIdx) => (
                   <li
@@ -410,12 +386,8 @@ const MenuBar = () => {
                     }}
                     onMouseEnter={() => setFocusedSubIndex(subIdx)}
                     style={{
-                      padding: '8px 15px',
-                      backgroundColor: focusedSubIndex === subIdx ? '#666' : 'transparent',
-                      cursor: 'pointer',
-                      whiteSpace: 'nowrap',
-                      outline: 'none',
-                      transition: 'background-color 0.1s ease',
+                      ...styles.submenuItem,
+                      ...(focusedSubIndex === subIdx ? styles.submenuItemSelected : {}),
                     }}
                   >
                     {item}
@@ -428,15 +400,19 @@ const MenuBar = () => {
       </div>
 
       {/* Main Content Area */}
-      <div style={{ padding: '20px', backgroundColor: '#f9f9f9', flexGrow: 1, overflowY: 'auto' }}>
+      <div style={styles.mainContentArea}>
         {/* Packet Capture Status */}
-        <div style={{ marginBottom: '15px', padding: '10px', backgroundColor: capturing ? '#d4edda' : '#f8d7da', color: capturing ? '#155724' : '#721c24', borderRadius: '5px' }}>
+        <div style={{
+          ...styles.captureStatus,
+          backgroundColor: capturing ? '#d4edda' : '#f8d7da',
+          color: capturing ? '#155724' : '#721c24',
+        }}>
           {capturing ? 'Packet Capture Running...' : 'Packet Capture Stopped.'}
         </div>
 
         {/* Display Filter Input */}
-        <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="display-filter" style={{ marginRight: '10px', fontWeight: 'bold', color: '#555' }}>
+        <div style={styles.filterInputContainer}>
+          <label htmlFor="display-filter" style={styles.filterLabel}>
             Display Filter:
           </label>
           <input
@@ -445,26 +421,11 @@ const MenuBar = () => {
             value={displayFilter}
             onChange={(e) => setDisplayFilter(e.target.value)}
             placeholder="e.g., tcp.port == 80 or ip.addr == 192.168.1.1"
-            style={{
-              width: 'calc(100% - 150px)',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              fontSize: '14px',
-            }}
+            style={styles.filterInputField}
           />
           <button
             onClick={() => alert(`Applying filter: ${displayFilter}`)}
-            style={{
-              marginLeft: '10px',
-              padding: '8px 15px',
-              backgroundColor: '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}
+            style={styles.applyFilterButton}
           >
             Apply
           </button>
@@ -473,25 +434,21 @@ const MenuBar = () => {
         {/* Captured Packets Display */}
         <div
           style={{
-            marginTop: '20px',
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            overflowX: 'auto',
-            backgroundColor: '#fff',
+            ...styles.packetDisplayTableContainer,
             fontSize: `${14 * zoomLevel}px`, // Apply zoom level
           }}
         >
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead style={{ backgroundColor: '#e0e0e0', position: 'sticky', top: 0 }}>
+          <table style={styles.packetTable}>
+            <thead style={styles.packetTableHeader}>
               <tr>
-                <th style={tableHeaderStyle}>ID</th>
-                <th style={tableHeaderStyle}>Time</th>
-                <th style={tableHeaderStyle}>Source</th>
-                <th style={tableHeaderStyle}>Destination</th>
-                <th style={tableHeaderStyle}>Protocol</th>
-                <th style={tableHeaderStyle}>Length</th>
-                <th style={tableHeaderStyle}>Info</th>
-                <th style={tableHeaderStyle}>Marked</th>
+                <th style={styles.tableHeaderCell}>ID</th>
+                <th style={styles.tableHeaderCell}>Time</th>
+                <th style={styles.tableHeaderCell}>Source</th>
+                <th style={styles.tableHeaderCell}>Destination</th>
+                <th style={styles.tableHeaderCell}>Protocol</th>
+                <th style={styles.tableHeaderCell}>Length</th>
+                <th style={styles.tableHeaderCell}>Info</th>
+                <th style={styles.tableHeaderCell}>Marked</th>
               </tr>
             </thead>
             <tbody>
@@ -500,23 +457,23 @@ const MenuBar = () => {
                   <tr
                     key={packet.id}
                     style={{
-                      borderBottom: '1px solid #eee',
+                      ...styles.tableRow,
                       backgroundColor: packet.marked ? '#fffacd' : 'transparent', // Light yellow for marked packets
                     }}
                   >
-                    <td style={tableCellStyle}>{packet.id}</td>
-                    <td style={tableCellStyle}>{packet.time}</td>
-                    <td style={tableCellStyle}>{packet.source}</td>
-                    <td style={tableCellStyle}>{packet.destination}</td>
-                    <td style={tableCellStyle}>{packet.protocol}</td>
-                    <td style={tableCellStyle}>{packet.length}</td>
-                    <td style={tableCellStyle}>{packet.info}</td>
-                    <td style={tableCellStyle}>{packet.marked ? '✅' : '❌'}</td>
+                    <td style={styles.tableCell}>{packet.id}</td>
+                    <td style={styles.tableCell}>{packet.time}</td>
+                    <td style={styles.tableCell}>{packet.source}</td>
+                    <td style={styles.tableCell}>{packet.destination}</td>
+                    <td style={styles.tableCell}>{packet.protocol}</td>
+                    <td style={styles.tableCell}>{packet.length}</td>
+                    <td style={styles.tableCell}>{packet.info}</td>
+                    <td style={styles.tableCell}>{packet.marked ? '✅' : '❌'}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
+                  <td colSpan="8" style={styles.noPacketsMessage}>
                     {capturing ? 'Capturing packets...' : 'No packets captured yet. Start a capture!'}
                   </td>
                 </tr>
@@ -547,97 +504,67 @@ const MenuBar = () => {
           role="dialog"
           aria-modal="true"
           aria-labelledby="about-title"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2000,
-            padding: '20px',
-          }}
+          style={styles.aboutDialogOverlay}
           onClick={() => setShowAbout(false)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            style={{
-              backgroundColor: '#fff',
-              color: '#000',
-              padding: '25px',
-              borderRadius: '12px',
-              maxWidth: '600px',
-              width: '100%',
-              textAlign: 'center',
-              boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
-              overflowY: 'auto',
-              maxHeight: '90vh',
-            }}
+            style={styles.aboutDialogContent}
           >
             {/* Project Logo */}
             <img
               src="src/assets/Logo.png"
               alt="NetShield Logo"
-              style={{ width: '100px', marginBottom: '10px', borderRadius: '8px' }}
+              style={styles.aboutDialogLogo}
             />
 
-            <h2 id="about-title" style={{ color: '#222', marginBottom: '15px' }}>About Net Shield</h2>
-            <p style={{ margin: '8px 0' }}><strong>Version:</strong> Net Shield v1.0.0</p>
-            <p style={{ margin: '8px 0' }}><strong>Domain:</strong> Cybersecurity / Network Security</p>
+            <h2 id="about-title" style={styles.aboutDialogTitle}>About Net Shield</h2>
+            <p style={styles.aboutDialogText}><strong>Version:</strong> Net Shield v1.0.0</p>
+            <p style={styles.aboutDialogText}><strong>Domain:</strong> Cybersecurity / Network Security</p>
 
-            <p style={{ margin: '15px 0', lineHeight: '1.6' }}>
+            <p style={styles.aboutDialogLongText}>
               <strong>Developed By:</strong> Nilesh B. Ghavate (MCA Final Year, SVERI's COE, Pandharpur [PAH Solapur University, Solapur])
             </p>
 
-            <p style={{ margin: '15px 0', lineHeight: '1.6' }}>
+            <p style={styles.aboutDialogLongText}>
               <strong>Project Purpose:</strong> Net Shield is a web-based network packet capturing tool designed to help users monitor and analyze network traffic for troubleshooting and security auditing.
               It is useful for identifying suspicious activity, diagnosing network issues, ensuring compliance with security policies, and gaining insights into network performance.
             </p>
-            <p style={{ margin: '15px 0', fontWeight: 'bold' }}>Key Features:</p>
-            <ul style={{ textAlign: 'left', margin: '0 auto 20px', maxWidth: '90%', listStyleType: 'disc', paddingLeft: '20px' }}>
-              <li style={{ marginBottom: '5px' }}>Capture and display real-time network packets (simulated).</li>
-              <li style={{ marginBottom: '5px' }}>Start and stop capturing sessions easily.</li>
-              <li style={{ marginBottom: '5px' }}>Save captured data for offline analysis.</li>
-              <li style={{ marginBottom: '5px' }}>User-friendly interface with zoom functionality.</li>
-              <li>Basic packet filtering capabilities.</li>
+            <p style={styles.aboutDialogBoldText}>Key Features:</p>
+            <ul style={styles.aboutDialogList}>
+              <li style={styles.aboutDialogListItem}>Capture and display real-time network packets (simulated).</li>
+              <li style={styles.aboutDialogListItem}>Start and stop capturing sessions easily.</li>
+              <li style={styles.aboutDialogListItem}>Save captured data for offline analysis.</li>
+              <li style={styles.aboutDialogListItem}>User-friendly interface with zoom functionality.</li>
+              <li style={styles.aboutDialogListItem}>Basic packet filtering capabilities.</li>
             </ul>
 
-            <p style={{ margin: '15px 0', fontWeight: 'bold' }}>Technologies Used:</p>
-            <ul style={{ textAlign: 'left', margin: '0 auto 20px', maxWidth: '90%', listStyleType: 'disc', paddingLeft: '20px' }}>
-              <li style={{ marginBottom: '5px' }}>React.js for frontend UI development.</li>
-              <li style={{ marginBottom: '5px' }}>Spring Boot for backend APIs (planned integration).</li>
-              <li style={{ marginBottom: '5px' }}>MySQL for database management (planned integration).</li>
-              <li style={{ marginBottom: '5px' }}>Nmap tool for packet capture (planned integration).</li>
-              <li>Inspired by Wireshark.</li>
+            <p style={styles.aboutDialogBoldText}>Technologies Used:</p>
+            <ul style={styles.aboutDialogList}>
+              <li style={styles.aboutDialogListItem}>React.js for frontend UI development.</li>
+              <li style={styles.aboutDialogListItem}>Spring Boot for backend APIs (planned integration).</li>
+              <li style={styles.aboutDialogListItem}>MySQL for database management (planned integration).</li>
+              <li style={styles.aboutDialogListItem}>Nmap tool for packet capture (planned integration).</li>
+              <li style={styles.aboutDialogListItem}>Inspired by Wireshark.</li>
             </ul>
 
             {/* Developer Photo */}
             <img
               src="src/assets/images/Screenshot 2025-05-10 181434.png"
               alt="Developer"
-              style={{
-                width: '90px',
-                height: '90px',
-                borderRadius: '50%',
-                marginBottom: '10px',
-                objectFit: 'cover',
-                border: '2px solid #222',
-              }}
+              style={styles.developerPhoto}
             />
 
             {/* Name & Role */}
-            <div style={{ marginBottom: '15px' }}>
-              <h3 style={{ margin: '5px 0', color: '#333' }}>Nilesh Ghavate</h3>
-              <p style={{ margin: 0, fontWeight: '500', color: '#555' }}>
+            <div style={styles.developerInfo}>
+              <h3 style={styles.developerName}>Nilesh Ghavate</h3>
+              <p style={styles.developerRole}>
                 Java Full Stack Developer Intern
               </p>
             </div>
 
             {/* Social Links */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
+            <div style={styles.socialLinksContainer}>
               {/* GitHub Image Link */}
               <a
                 href="https://github.com/ghavate-n11"
@@ -648,7 +575,7 @@ const MenuBar = () => {
                 <img
                   src="src/assets/images/github.png"
                   alt="GitHub"
-                  style={{ width: '28px', height: '28px' }}
+                  style={styles.socialIcon}
                 />
               </a>
 
@@ -662,7 +589,7 @@ const MenuBar = () => {
                 <img
                   src="src/assets/images/linkedin.png"
                   alt="LinkedIn"
-                  style={{ width: '28px', height: '28px' }}
+                  style={styles.socialIcon}
                 />
               </a>
 
@@ -676,7 +603,7 @@ const MenuBar = () => {
                 <img
                   src="src/assets/images/HackerRank_Icon-1000px.png"
                   alt="HackerRank"
-                  style={{ width: '28px', height: '28px' }}
+                  style={styles.socialIcon}
                 />
               </a>
             </div>
@@ -684,17 +611,7 @@ const MenuBar = () => {
             {/* Close Button */}
             <button
               onClick={() => setShowAbout(false)}
-              style={{
-                marginTop: '25px',
-                padding: '10px 20px',
-                backgroundColor: '#222',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '16px',
-                transition: 'background-color 0.2s ease',
-              }}
+              style={styles.closeButton}
             >
               Close
             </button>
@@ -705,18 +622,241 @@ const MenuBar = () => {
   );
 };
 
-// Styles for the table cells
-const tableHeaderStyle = {
-  padding: '12px 15px',
-  textAlign: 'left',
-  borderBottom: '2px solid #ddd',
-  fontWeight: 'bold',
-  color: '#444',
-};
-
-const tableCellStyle = {
-  padding: '10px 15px',
-  borderBottom: '1px solid #eee',
+// Consolidated Styles Object
+const styles = {
+  menuContainer: {
+    position: 'relative',
+    width: '100%',
+    backgroundColor: '#0f172a', /* Deep navy */
+    fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif',
+    minHeight: '100vh', // Ensure it takes full viewport height
+    color: '#333', // Default text color for main content
+  },
+  menuBar: {
+    display: 'flex',
+    backgroundColor: '#1e293b', /* Slate blue */
+    padding: '0.75rem 1rem',
+    borderBottom: '2px solid #334155',
+    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)',
+    zIndex: 1000,
+  },
+  menuItem: {
+    marginRight: '1.5rem',
+    color: '#cbd5e1', /* Light gray-blue */
+    cursor: 'pointer',
+    fontWeight: 600,
+    fontSize: '1rem',
+    padding: '0.25rem 0.5rem',
+    borderRadius: '6px',
+    transition: 'background-color 0.2s ease, color 0.2s ease',
+    position: 'relative', // For submenu positioning
+    outline: 'none', // Remove default outline
+  },
+  menuItemActive: {
+    backgroundColor: '#334155',
+    color: '#60a5fa', /* Sky blue */
+  },
+  submenu: {
+    listStyle: 'none',
+    margin: 0,
+    padding: '0.5rem 0',
+    position: 'absolute',
+    top: '100%', // Position below the menu item
+    left: 0,
+    backgroundColor: '#1e293b',
+    border: '1px solid #475569',
+    borderRadius: '8px',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
+    minWidth: '220px',
+    zIndex: 999,
+  },
+  submenuItem: {
+    padding: '0.6rem 1rem',
+    color: '#e2e8f0', /* Light text */
+    cursor: 'pointer',
+    fontSize: '0.95rem',
+    borderRadius: '4px',
+    transition: 'background-color 0.2s ease, color 0.2s ease',
+    whiteSpace: 'nowrap', // Prevent text wrapping
+    outline: 'none', // Remove default outline
+  },
+  submenuItemSelected: {
+    backgroundColor: '#334155',
+    color: '#38bdf8', /* Bright cyan */
+  },
+  mainContentArea: {
+    padding: '20px',
+    backgroundColor: '#f1f5f9', // Lighter background for content
+    flexGrow: 1, // Allow content to expand
+    overflowY: 'auto', // Enable scrolling for content if it overflows
+  },
+  captureStatus: {
+    marginBottom: '15px',
+    padding: '10px',
+    borderRadius: '5px',
+    fontWeight: 'bold',
+  },
+  filterInputContainer: {
+    marginBottom: '15px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  filterLabel: {
+    marginRight: '10px',
+    fontWeight: 'bold',
+    color: '#555',
+  },
+  filterInputField: {
+    width: 'calc(100% - 150px)',
+    padding: '8px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    fontSize: '14px',
+  },
+  applyFilterButton: {
+    marginLeft: '10px',
+    padding: '8px 15px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    transition: 'background-color 0.2s ease',
+  },
+  packetDisplayTableContainer: {
+    marginTop: '20px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    overflowX: 'auto',
+    backgroundColor: '#fff',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+  },
+  packetTable: {
+    width: '100%',
+    borderCollapse: 'collapse',
+  },
+  packetTableHeader: {
+    backgroundColor: '#e0e0e0',
+    position: 'sticky',
+    top: 0,
+  },
+  tableHeaderCell: {
+    padding: '12px 15px',
+    textAlign: 'left',
+    borderBottom: '2px solid #ddd',
+    fontWeight: 'bold',
+    color: '#444',
+  },
+  tableRow: {
+    borderBottom: '1px solid #eee',
+    // Background color for marked packets is handled dynamically
+  },
+  tableCell: {
+    padding: '10px 15px',
+    borderBottom: '1px solid #eee',
+  },
+  noPacketsMessage: {
+    textAlign: 'center',
+    padding: '20px',
+    color: '#888',
+  },
+  aboutDialogOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 2000,
+    padding: '20px',
+  },
+  aboutDialogContent: {
+    backgroundColor: '#fff',
+    color: '#000',
+    padding: '25px',
+    borderRadius: '12px',
+    maxWidth: '600px',
+    width: '100%',
+    textAlign: 'center',
+    boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+    overflowY: 'auto',
+    maxHeight: '90vh',
+  },
+  aboutDialogLogo: {
+    width: '100px',
+    marginBottom: '10px',
+    borderRadius: '8px',
+  },
+  aboutDialogTitle: {
+    color: '#222',
+    marginBottom: '15px',
+  },
+  aboutDialogText: {
+    margin: '8px 0',
+  },
+  aboutDialogLongText: {
+    margin: '15px 0',
+    lineHeight: '1.6',
+  },
+  aboutDialogBoldText: {
+    margin: '15px 0',
+    fontWeight: 'bold',
+  },
+  aboutDialogList: {
+    textAlign: 'left',
+    margin: '0 auto 20px',
+    maxWidth: '90%',
+    listStyleType: 'disc',
+    paddingLeft: '20px',
+  },
+  aboutDialogListItem: {
+    marginBottom: '5px',
+  },
+  developerPhoto: {
+    width: '90px',
+    height: '90px',
+    borderRadius: '50%',
+    marginBottom: '10px',
+    objectFit: 'cover',
+    border: '2px solid #222',
+  },
+  developerInfo: {
+    marginBottom: '15px',
+  },
+  developerName: {
+    margin: '5px 0',
+    color: '#333',
+  },
+  developerRole: {
+    margin: 0,
+    fontWeight: '500',
+    color: '#555',
+  },
+  socialLinksContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '15px',
+    marginTop: '10px',
+  },
+  socialIcon: {
+    width: '28px',
+    height: '28px',
+  },
+  closeButton: {
+    marginTop: '25px',
+    padding: '10px 20px',
+    backgroundColor: '#222',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '16px',
+    transition: 'background-color 0.2s ease',
+  },
 };
 
 export default MenuBar;

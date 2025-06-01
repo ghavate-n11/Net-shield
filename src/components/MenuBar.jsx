@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Dashboard from '../pages/Dashboard.jsx'; // Corrected: Dashboard is in the 'pages' directory
 
 const menuStructure = [
   { label: 'File', submenu: ['Open', 'Save', 'Print', 'Quit'] },
@@ -21,15 +22,13 @@ const helpLinks = {
   FAQs: 'https://docs.google.com/document/d/1xVkZjEjDv7S-QWot7paW6px58NPiT9Docv5f5XwON04/edit?usp=sharing',
 };
 
-const MenuBar = () => {
+// MenuBar component now accepts props for capture control
+const MenuBar = ({ isCapturing, onStartCapture, onStopCapture, capturedPackets, onFilterChange, onSearchTermChange }) => {
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const [focusedSubIndex, setFocusedSubIndex] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [showAbout, setShowAbout] = useState(false);
-  const [capturing, setCapturing] = useState(false);
-  const [capturedPackets, setCapturedPackets] = useState([]); // Array to hold simulated packets
-  const [displayFilter, setDisplayFilter] = useState('');
-  const [nextPacketId, setNextPacketId] = useState(1); // To assign unique IDs to packets
+  const [displayFilter, setDisplayFilter] = useState(''); // State for local filter input
 
   const fileInputRef = useRef(null);
   const menuBarRef = useRef(null);
@@ -46,30 +45,6 @@ const MenuBar = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  // Effect for simulating packet capture
-  useEffect(() => {
-    let interval;
-    if (capturing) {
-      interval = setInterval(() => {
-        setCapturedPackets((prev) => [
-          ...prev,
-          {
-            id: nextPacketId,
-            time: new Date().toLocaleTimeString(),
-            source: `192.168.1.${Math.floor(Math.random() * 255)}`,
-            destination: `10.0.0.${Math.floor(Math.random() * 255)}`,
-            protocol: ['TCP', 'UDP', 'ICMP', 'HTTP'][Math.floor(Math.random() * 4)],
-            length: Math.floor(Math.random() * 100) + 50,
-            info: `Simulated Packet ${nextPacketId}`,
-            marked: false,
-          },
-        ]);
-        setNextPacketId((prev) => prev + 1);
-      }, 1000); // Capture a new packet every second
-    }
-    return () => clearInterval(interval);
-  }, [capturing, nextPacketId]);
 
   // Keyboard navigation for menu
   const handleKeyDown = useCallback((e) => {
@@ -163,8 +138,6 @@ const MenuBar = () => {
         break;
       case 'File:Quit':
         if (window.confirm('Are you sure you want to quit?')) {
-          // This will only work if the window was opened by script.
-          // For security, browsers often prevent closing windows not opened by script.
           window.close();
         }
         break;
@@ -174,7 +147,6 @@ const MenuBar = () => {
           const foundPacket = capturedPackets.find(p => p.id === parseInt(packetId));
           if (foundPacket) {
             alert(`Found Packet: ID ${foundPacket.id}, Protocol: ${foundPacket.protocol}`);
-            // In a real app, you'd scroll to and highlight this packet
           } else {
             alert(`Packet with ID ${packetId} not found.`);
           }
@@ -186,10 +158,8 @@ const MenuBar = () => {
       case 'Edit:Mark Packet':
         const markPacketId = prompt('Enter Packet ID to mark/unmark:');
         if (markPacketId) {
-          setCapturedPackets(prev => prev.map(p =>
-            p.id === parseInt(markPacketId) ? { ...p, marked: !p.marked } : p
-          ));
-          alert(`Packet ${markPacketId} marked/unmarked.`);
+          // This would ideally interact with Dashboard's state
+          alert(`Packet ${markPacketId} marked/unmarked (simulated).`);
         }
         break;
       case 'Edit:Preferences':
@@ -216,7 +186,6 @@ const MenuBar = () => {
           const targetPacket = capturedPackets.find(p => p.id === parseInt(goToId));
           if (targetPacket) {
             alert(`Navigating to Packet ID: ${targetPacket.id}`);
-            // In a real app, scroll to and highlight this packet
           } else {
             alert(`Packet with ID ${goToId} not found.`);
           }
@@ -237,20 +206,10 @@ const MenuBar = () => {
         alert('Navigating to next packet (simulated).');
         break;
       case 'Capture:Start':
-        if (capturing) {
-          alert('Capture already started!');
-        } else {
-          setCapturing(true);
-          alert('Capture started (simulated)');
-        }
+        onStartCapture(); // Call the prop function
         break;
       case 'Capture:Stop':
-        if (!capturing) {
-          alert('No capture is running.');
-        } else {
-          setCapturing(false);
-          alert('Capture stopped (simulated)');
-        }
+        onStopCapture(); // Call the prop function
         break;
       case 'Capture:Options':
         alert('Opening capture options (simulated).');
@@ -322,7 +281,7 @@ const MenuBar = () => {
   const saveCapturedData = () => {
     // Convert captured packets array to a string for saving
     const dataToSave = capturedPackets.map(p =>
-      `ID: ${p.id}, Time: ${p.time}, Source: ${p.source}, Destination: ${p.destination}, Protocol: ${p.protocol}, Length: ${p.length}, Info: ${p.info}${p.marked ? ' (MARKED)' : ''}`
+      `ID: ${p.id}, Time: ${p.timestamp}, Source: ${p.source}, Destination: ${p.destination}, Protocol: ${p.protocol}, Length: ${p.length}, Info: ${p.info}${p.marked ? ' (MARKED)' : ''}`
     ).join('\n');
 
     const blob = new Blob([dataToSave], { type: 'text/plain' });
@@ -338,10 +297,6 @@ const MenuBar = () => {
     }, 0);
   };
 
-  // Filtered packets based on displayFilter (simple string match for demonstration)
-  const filteredPackets = capturedPackets.filter(packet =>
-    JSON.stringify(packet).toLowerCase().includes(displayFilter.toLowerCase())
-  );
 
   return (
     <div style={styles.menuContainer}>
@@ -399,88 +354,17 @@ const MenuBar = () => {
         ))}
       </div>
 
-      {/* Main Content Area */}
+      {/* Main Content Area - Now contains the Dashboard */}
       <div style={styles.mainContentArea}>
-        {/* Packet Capture Status */}
-        <div style={{
-          ...styles.captureStatus,
-          backgroundColor: capturing ? '#d4edda' : '#f8d7da',
-          color: capturing ? '#155724' : '#721c24',
-        }}>
-          {capturing ? 'Packet Capture Running...' : 'Packet Capture Stopped.'}
-        </div>
-
-        {/* Display Filter Input */}
-        <div style={styles.filterInputContainer}>
-          <label htmlFor="display-filter" style={styles.filterLabel}>
-            Display Filter:
-          </label>
-          <input
-            id="display-filter"
-            type="text"
-            value={displayFilter}
-            onChange={(e) => setDisplayFilter(e.target.value)}
-            placeholder="e.g., tcp.port == 80 or ip.addr == 192.168.1.1"
-            style={styles.filterInputField}
-          />
-          <button
-            onClick={() => alert(`Applying filter: ${displayFilter}`)}
-            style={styles.applyFilterButton}
-          >
-            Apply
-          </button>
-        </div>
-
-        {/* Captured Packets Display */}
-        <div
-          style={{
-            ...styles.packetDisplayTableContainer,
-            fontSize: `${14 * zoomLevel}px`, // Apply zoom level
-          }}
-        >
-          <table style={styles.packetTable}>
-            <thead style={styles.packetTableHeader}>
-              <tr>
-                <th style={styles.tableHeaderCell}>ID</th>
-                <th style={styles.tableHeaderCell}>Time</th>
-                <th style={styles.tableHeaderCell}>Source</th>
-                <th style={styles.tableHeaderCell}>Destination</th>
-                <th style={styles.tableHeaderCell}>Protocol</th>
-                <th style={styles.tableHeaderCell}>Length</th>
-                <th style={styles.tableHeaderCell}>Info</th>
-                <th style={styles.tableHeaderCell}>Marked</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPackets.length > 0 ? (
-                filteredPackets.map((packet) => (
-                  <tr
-                    key={packet.id}
-                    style={{
-                      ...styles.tableRow,
-                      backgroundColor: packet.marked ? '#fffacd' : 'transparent', // Light yellow for marked packets
-                    }}
-                  >
-                    <td style={styles.tableCell}>{packet.id}</td>
-                    <td style={styles.tableCell}>{packet.time}</td>
-                    <td style={styles.tableCell}>{packet.source}</td>
-                    <td style={styles.tableCell}>{packet.destination}</td>
-                    <td style={styles.tableCell}>{packet.protocol}</td>
-                    <td style={styles.tableCell}>{packet.length}</td>
-                    <td style={styles.tableCell}>{packet.info}</td>
-                    <td style={styles.tableCell}>{packet.marked ? '✅' : '❌'}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="8" style={styles.noPacketsMessage}>
-                    {capturing ? 'Capturing packets...' : 'No packets captured yet. Start a capture!'}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        {/* Render the Dashboard component here */}
+        <Dashboard
+          isCapturing={isCapturing} // Pass down the capturing state
+          onStartCapture={onStartCapture} // Pass start capture function
+          onStopCapture={onStopCapture} // Pass stop capture function
+          capturedPackets={capturedPackets} // Pass captured packets to Dashboard
+          onFilterChange={onFilterChange} // Pass filter change handler to Dashboard
+          onSearchTermChange={onSearchTermChange} // Pass search term change handler to Dashboard
+        />
       </div>
 
       {/* Hidden File Input for Open */}
@@ -685,10 +569,13 @@ const styles = {
     color: '#38bdf8', /* Bright cyan */
   },
   mainContentArea: {
-    padding: '20px',
+    padding: '0', // Removed padding here, as Dashboard handles its own padding
     backgroundColor: '#f1f5f9', // Lighter background for content
     flexGrow: 1, // Allow content to expand
     overflowY: 'auto', // Enable scrolling for content if it overflows
+    display: 'flex', // Make it a flex container
+    flexDirection: 'column', // Stack children vertically
+    height: 'calc(100vh - 65px)', // Ensure it takes remaining height (adjust 65px if menuBar height changes)
   },
   captureStatus: {
     marginBottom: '15px',

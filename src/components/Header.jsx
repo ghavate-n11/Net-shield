@@ -59,8 +59,25 @@ const Header = () => {
               Alerts
             </Link>
           </li>
+          <li>
+            <Link
+              to="/tools" // You might want to change this path based on your routing
+              style={{
+                color: "#fff",
+                textDecoration: "none",
+                fontSize: "1.1rem",
+                padding: "0.5rem 0.75rem",
+                borderRadius: "5px",
+                transition: "background-color 0.3s ease, transform 0.2s ease",
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            >
+              Tools
+            </Link>
+          </li>
           {/* You can add more navigation links here */}
-          {/* <li>
+          <li>
             <Link
               to="/dashboard"
               style={{
@@ -76,7 +93,7 @@ const Header = () => {
             >
               Dashboard
             </Link>
-          </li> */}
+          </li> 
         </ul>
       </nav>
     </header>

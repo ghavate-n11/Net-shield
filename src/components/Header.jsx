@@ -91,7 +91,7 @@ const Header = () => {
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
             >
-              Dashboard
+             
             </Link>
           </li> 
         </ul>

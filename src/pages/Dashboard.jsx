@@ -76,7 +76,7 @@ const Ribbon = ({ filter, onFilterChange, onStart, onStop, onReload, isCapturing
       alignItems: 'center',
       gap: '1rem',
       color: '#a3d9ff',
-      boxShadow: '0 0 5pxrgb(184, 112, 19)',
+      boxShadow: '0 0 5px rgb(184, 112, 19)',
       fontFamily: 'Arial, sans-serif',
     }}
   >
@@ -371,7 +371,7 @@ const PacketDetails = ({ packet, onFollowConversation }) => {
       </h3>
       <ul style={{ listStyleType: 'none', paddingLeft: 0, margin: 0 }}>
         {Object.entries(packet).map(([key, value]) => {
-          // Skip 'id' and 'details' as they are handled or nested
+          // Skip 'id' as it's displayed in the header
           if (key === 'id') return null;
           return <DetailItem key={key} label={key} value={value} />;
         })}
@@ -819,7 +819,7 @@ const Dashboard = () => {
     // Apply conversation filter if active
     const conversationMatch = !conversationFilter ||
       ((pkt.source === conversationFilter.source && pkt.destination === conversationFilter.destination) ||
-       (pkt.source === conversationFilter.destination && pkt.destination === conversationFilter.source));
+        (pkt.source === conversationFilter.destination && pkt.destination === conversationFilter.source));
 
     return filterMatch && searchMatch && conversationMatch;
   });
@@ -901,14 +901,22 @@ const Dashboard = () => {
           padding: '1rem',
           fontFamily: 'Arial, sans-serif',
           backgroundColor: '#0b1a38',
-          minHeight: 'calc(100vh - 65px)', // Adjust for ribbon height
-          maxHeight: 'calc(100vh - 65px)', // Ensure it doesn't overflow
-          overflow: 'hidden', // Hide overflow from this container
+          // Adjusted height calculation: 100vh - (Ribbon Height + Main Container Top/Bottom Padding)
+          // Assuming Ribbon height is fixed, e.g., ~60px + 0.75rem*2 = 72px + 1.5rem = ~96px
+          // A safer approach is `calc(100vh - <fixed_ribbon_height> - <total_vertical_padding>)`
+          // Let's assume the ribbon is roughly 60px in height + 0.75rem top/bottom padding = 72px
+          // The main container itself has 1rem (16px) top and bottom padding = 32px
+          // So, total fixed height to subtract: 72px + 32px = 104px.
+          // Using `calc(100vh - 104px)` for the main content area should work.
+          height: 'calc(100vh - 72px)', // Assuming Ribbon is around 72px (from previous calculations)
+                                          // and we want to fill the rest. No need for min/max
+                                          // if we ensure flex-grow items fill the space.
+          overflow: 'hidden', // Prevents outer scrollbar, internal components handle their own
         }}
       >
         <div
           style={{
-            flex: 2,
+            flex: 2, /* This takes 2 parts of the available space */
             display: 'flex',
             flexDirection: 'column',
             gap: '1rem',
@@ -921,36 +929,41 @@ const Dashboard = () => {
             <div style={{ color: '#ffeb3b', padding: '0.5rem', backgroundColor: '#3f51b533', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span>Showing conversation between {conversationFilter.source} and {conversationFilter.destination}.</span>
               <button
-                onClick={() => setConversationFilter(null)}
+                onClick={() => handleFollowConversation(null)}
                 style={{
-                  backgroundColor: '#f44336',
+                  backgroundColor: '#dc3545', // Danger red
                   border: 'none',
-                  padding: '0.3rem 0.7rem',
+                  padding: '0.3rem 0.6rem',
                   borderRadius: '3px',
                   color: '#e0f2f7',
                   cursor: 'pointer',
                   fontWeight: 'bold',
-                  fontSize: '0.8rem',
+                  fontSize: '0.75rem',
                 }}
                 title="Clear conversation filter"
               >
-                Clear Filter
+                Clear
               </button>
             </div>
           )}
-          <NetworkTable packets={filteredPackets} onSelect={handleSelect} selectedPacket={selectedPacket} />
+          <NetworkTable
+            packets={filteredPackets}
+            onSelect={handleSelect}
+            selectedPacket={selectedPacket}
+            onFollowConversation={handleFollowConversation}
+          />
         </div>
         <div
           style={{
-            flex: 1,
+            flex: 1, /* This takes 1 part of the available space */
             display: 'flex',
             flexDirection: 'column',
             gap: '1rem',
-            paddingLeft: '1rem',
+            overflowY: 'hidden', // Managed by its children
           }}
         >
-          <PacketDetails packet={selectedPacket} onFollowConversation={handleFollowConversation} />
           <PacketDiagram packet={selectedPacket} />
+          <PacketDetails packet={selectedPacket} onFollowConversation={handleFollowConversation} />
           <SummaryPanel packets={packets} />
         </div>
       </div>

@@ -1,7 +1,5 @@
 package PacketLogPageController;
 
-
-
 import com.netshield.entity.PacketLog;
 import com.netshield.service.PacketLogService; // Import your service
 import org.springframework.beans.factory.annotation.Autowired;

@@ -79,7 +79,7 @@ git clone https://github.com/ghavate-n11/Netshild-.git
 ./mvnw spring-boot:run
 ```
 
-### 3. Frontend Setup (React) *(In Progress)*
+### 3. Frontend Setup (React) *(In Progress)* sorry for delay 
 
 ```bash
 cd Netshild-

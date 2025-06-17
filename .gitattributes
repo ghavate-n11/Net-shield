@@ -1,2 +1,2 @@
-/mvnw text eol=lf
+/mvnw text eol=lf//maven
 *.cmd text eol=crlf

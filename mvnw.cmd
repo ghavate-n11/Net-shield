@@ -70,7 +70,7 @@ switch -wildcard -casesensitive ( $($distributionUrl -replace '^.*/','') ) {
   }
 }
 
-# apply MVNW_REPOURL and calculate MAVEN_HOME
+# apply MVNW_REPOURL and calculate MAVEN_HOME # Maven
 # maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
 if ($env:MVNW_REPOURL) {
   $MVNW_REPO_PATTERN = if ($USE_MVND) { "/org/apache/maven/" } else { "/maven/mvnd/" }

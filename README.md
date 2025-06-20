@@ -1,154 +1,164 @@
- 🚨 NetShield: Network Sniffing & Security Analyzer
+# 🚨 NetShield
 
-**NetShield** is a powerful, real-time, web-based network traffic monitoring and security analysis tool built using **Spring Boot**, **React.js**, and **MySQL**. It is designed for developers, network administrators, and cybersecurity learners who want to **detect suspicious activities**, **track IP behavior**, and **enhance overall network security**.
+**Network Sniffing & Security Analyzer**
+
+Real-time, web-based network traffic monitoring and security analysis tool built with **Spring Boot**, **React.js**, and **MySQL**.
 
 ---
 
-## 🎯 Main Motto
+## 🎯 Motto
 
-> **"See the unseen. Secure the unknown."**
-
-NetShield aims to **make invisible threats visible** by giving you real-time insight into your network, empowering you to detect and defend against cyber threats before they strike.
+> “See the unseen. Secure the unknown.”  
+Empowering users with real-time visibility into their network to detect and thwart cyber threats before they strike.
 
 ---
 
 ## 🧠 Why NetShield?
 
-In today’s fast-paced digital world, most people and organizations have **limited visibility into what's happening inside their networks**. Cybercriminals exploit this weakness using stealthy, undetected methods.
+Organizations often lack deep insight into internal network traffic—especially stealthy, malicious behavior. NetShield solves that by:
 
-**NetShield** bridges this gap by:
+- Providing **live packet monitoring**
+- Detecting **suspicious IP activity**
+- Offering a **user-friendly dashboard** for swift analysis and action
 
-* Providing **live monitoring** of incoming/outgoing network packets
-* Detecting **suspicious patterns or IPs**
-* Offering an intuitive dashboard for **quick analysis and decision-making**
-
-Whether you're a developer, system admin, or cybersecurity enthusiast, NetShield helps you **stay one step ahead of threats**.
+Ideal for developers, sysadmins, and cybersecurity learners.
 
 ---
 
-## 🚀 What’s New / Unique?
+## 🚀 What Makes NetShield Unique?
 
-Unlike traditional tools, **NetShield** brings:
-
-* ⚡ **Web-based Simplicity**: Access and analyze your network via a modern browser UI.
-* 🧠 **Smart Pattern Detection**: Identify unusual behaviors with early-stage detection mechanisms.
-* 📊 **Interactive Dashboards**: Track stats, charts, and IP logs visually.
-* 🔄 **Full-Stack Integration**: Built from scratch using **Spring Boot**, **React**, and **MySQL** for a seamless experience.
-* 🛠️ **Developer-Friendly Architecture**: Easily customizable, extendable, and deployable.
+- **Web-based simplicity** – monitor and analyze your network via browser
+- **Smart pattern detection** – early recognition of unusual behaviors
+- **Interactive dashboards** – charts, IP logs, stats at a glance
+- **Full-stack native** – integrated Spring Boot, React, MySQL architecture
+- **Developer-centric** – clean, modular, extendable codebase
 
 ---
 
 ## 📦 Tech Stack
 
-| Layer        | Technology            |
-| ------------ | --------------------- |
-| **Frontend** | React.js              |
-| **Backend**  | Spring Boot (Java)    |
-| **Database** | MySQL                 |
-| **Other**    | REST APIs, Maven, Git |
+| Layer        | Technology              |
+|--------------|-------------------------|
+| **Frontend** | React.js, Axios         |
+| **Backend**  | Java (Spring Boot), Maven |
+| **Database** | MySQL                   |
+| **APIs & Deployment** | REST, Git           |
 
 ---
 
 ## ✨ Key Features
 
-* 🔍 **Real-Time Packet Monitoring**
-* 🚨 **Suspicious IP Address Detection**
-* 🛡️ **Security Threat Pattern Analysis**
-* 💾 **Secure Data Storage with MySQL**
-* 👤 **User-Friendly Admin & User Interfaces**
-* 📊 **Interactive Dashboard with Graphs & Stats**
+- 🔍 **Real‑Time Packet Monitoring**  
+- 🚨 **Suspicious IP Detection**  
+- 🛡️ **Threat Pattern Analysis**  
+- 💾 **Secure MySQL Data Storage**  
+- 👤 **Admin & User‑Friendly UI**  
+- 📊 **Visual Dashboards & Analytics**
 
 ---
 
 ## ⚙️ Getting Started
 
-### 1. Clone the Repositories
+### 1. Clone Repositories
+```bash
+git clone https://github.com/ghavate-n11/netshield-backend.git backend
+git clone https://github.com/ghavate-n11/Netshild-.git frontend
+````
+
+### 2. Run Backend (Spring Boot)
 
 ```bash
-git clone https://github.com/ghavate-n11/netshield-backend.git
-git clone https://github.com/ghavate-n11/Netshild-.git
-```
-
-### 2. Backend Setup (Spring Boot)
-
-* Open the `netshield-backend` folder in IntelliJ IDEA or Eclipse.
-* Update your MySQL credentials in `application.properties`.
-* Run the project using:
-
-```bash
+cd backend
 ./mvnw spring-boot:run
 ```
 
-### 3. Frontend Setup (React) *(In Progress)* sorry for delay 
+* Update `src/main/resources/application.properties` with your MySQL credentials.
+
+### 3. Run Frontend (React)
 
 ```bash
-cd Netshild-
+cd frontend
 npm install
 npm start
 ```
 
-* Frontend: [http://localhost:3000](http://localhost:3000)
-* Backend API: [http://localhost:8080](http://localhost:8080)
+* Access:
 
-📌 *Note: Frontend enhancements and UI improvements are currently under development.*
+  * Frontend UI — [http://localhost:3000](http://localhost:3000)
+  * Backend API — [http://localhost:8080](http://localhost:8080)
+
+📌 **Note:** Frontend is currently under active development—UI/UX enhancements in progress.
 
 ---
 
-## 📁 Project Structure *(Work in progress....)*
+## 📁 Project Structure
 
-Folder structure and detailed breakdown of modules will be documented soon.
+```
 netshield/
-├── backend/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/com/yourorg/netshield/
-│   │   │   │   ├── NetshieldApplication.java
-│   │   │   │   ├── config/
-│   │   │   │   ├── controller/
-│   │   │   │   ├── service/
-│   │   │   │   └── repository/
-│   │   │   └── resources/
-│   │   │       ├── application.properties
-│   │   │       ├── static/
-│   │   │       └── templates/
-│   │   └── test/…
-│   └── pom.xml
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── services/     (API calls via Axios)
-│   │   ├── pages/
-│   │   ├── App.jsx
-│   │   ├── index.jsx
-│   │   └── router.jsx
-│   ├── package.json
-│   └── README.md
-└── README.md
-
+├── backend/        # Java Spring Boot backend (REST API, services, JPA repos)
+│   ├── src/main/java/com/yourorg/netshield/
+│   │   ├── config/
+│   │   ├── controller/
+│   │   ├── service/
+│   │   └── repository/
+│   └── src/main/resources/      # MySQL config + static content storage
+└── frontend/       # React frontend
+    ├── public/     # Static index.html
+    └── src/
+        ├── components/         # UI widgets (tables, dashboards)
+        ├── services/           # Axios API logic
+        ├── pages/              # Views (Dashboard, Settings)
+        ├── router.jsx          # React Router setup
+        ├── App.jsx
+        └── index.jsx
+```
 
 ---
 
-## 🚀 Future Enhancements
+## ⚙️ Production Build & Deployment
 
-* 🔐 Implement JWT-based user authentication
-* 🌐 Deploy on platforms like **Render**, **Netlify**, or **Heroku**
-* 📱 Make the UI fully mobile-responsive
-* 🧠 Integrate AI/ML-based Intrusion Detection System (IDS)
+1. Build React app:
+
+```bash
+cd frontend
+npm run build
+```
+
+2. Copy `build/` output into `backend/src/main/resources/static/`.
+3. Run Maven package:
+
+```bash
+cd backend
+./mvnw clean package
+java -jar target/netshield-0.0.1-SNAPSHOT.jar
+```
+
+This bundles both backend and frontend into a single deployable JAR ([github.com][2], [github.com][3], [baeldung.com][4]).
+
+---
+
+## 🚧 Roadmap & Upcoming Features
+
+* 🔐 JWT-based authentication
+* 📱 Mobile-responsive UI
+* 🌐 Cloud deployment (Heroku, Render, Netlify)
+* 🧠 AI/ML-powered intrusion detection
+* 🛠 CLI export & rule generation
+* 🔄 Persistent state via localStorage
+* 🔧 Configurable rule sets, user roles
 
 ---
 
 ## 🤝 Contributors
 
-| Name                     | Role                                |
-| ------------------------ | ----------------------------------- |
-| 👨‍💻 **Nilesh Ghavate** | Full Stack Developer (Java + React) |
-| 🎓 **Varnan Sir**        | Project Guide & Technical Mentor    |
+| Name                 | Role                                |
+| -------------------- | ----------------------------------- |
+| 👨‍💻 Nilesh Ghavate | Full‑Stack Developer (Java + React) |
+| 🎓 Varnan Sir        | Project Guide & Technical Mentor    |
 
 ---
 
-## 🙋‍♂️ About the Author
+## 🙋‍♂️ Connect with the Author
 
-**Nilesh Ghavate**
-📧 [nileshghavate11@gmail.com](mailto:nileshghavate11@gmail.com)
-🔗 [LinkedIn](https://linkedin.com/in/nileshghavate-203b27251)
+* 📧 [nileshghavate11@gmail.com](mailto:nileshghavate11@gmail.com)
+* 🔗 [LinkedIn](https://linkedin.com/in/nileshghavate-203b27251)

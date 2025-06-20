@@ -94,9 +94,38 @@ npm start
 
 ---
 
-## 📁 Project Structure *(Coming Soon)*
+## 📁 Project Structure *(Work in progress....)*
 
 Folder structure and detailed breakdown of modules will be documented soon.
+netshield/
+├── backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/yourorg/netshield/
+│   │   │   │   ├── NetshieldApplication.java
+│   │   │   │   ├── config/
+│   │   │   │   ├── controller/
+│   │   │   │   ├── service/
+│   │   │   │   └── repository/
+│   │   │   └── resources/
+│   │   │       ├── application.properties
+│   │   │       ├── static/
+│   │   │       └── templates/
+│   │   └── test/…
+│   └── pom.xml
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── services/     (API calls via Axios)
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   ├── index.jsx
+│   │   └── router.jsx
+│   ├── package.json
+│   └── README.md
+└── README.md
+
 
 ---
 

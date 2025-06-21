@@ -1,4 +1,4 @@
-# 🚨 NetShield
+# NetShield
 
 **Network Sniffing & Security Analyzer**
 
@@ -6,14 +6,14 @@ Real-time, web-based network traffic monitoring and security analysis tool built
 
 ---
 
-## 🎯 Motto
+##  Motto
 
 > “See the unseen. Secure the unknown.”  
 Empowering users with real-time visibility into their network to detect and thwart cyber threats before they strike.
 
 ---
 
-## 🧠 Why NetShield?
+##  Why NetShield?
 
 Organizations often lack deep insight into internal network traffic—especially stealthy, malicious behavior. NetShield solves that by:
 
@@ -25,7 +25,7 @@ Ideal for developers, sysadmins, and cybersecurity learners.
 
 ---
 
-## 🚀 What Makes NetShield Unique?
+## What Makes NetShield Unique?
 
 - **Web-based simplicity** – monitor and analyze your network via browser
 - **Smart pattern detection** – early recognition of unusual behaviors
@@ -35,7 +35,7 @@ Ideal for developers, sysadmins, and cybersecurity learners.
 
 ---
 
-## 📦 Tech Stack
+## Tech Stack
 
 | Layer        | Technology              |
 |--------------|-------------------------|
@@ -46,24 +46,23 @@ Ideal for developers, sysadmins, and cybersecurity learners.
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 - 🔍 **Real‑Time Packet Monitoring**  
-- 🚨 **Suspicious IP Detection**  
-- 🛡️ **Threat Pattern Analysis**  
-- 💾 **Secure MySQL Data Storage**  
-- 👤 **Admin & User‑Friendly UI**  
-- 📊 **Visual Dashboards & Analytics**
+- **Suspicious IP Detection**  
+- **Threat Pattern Analysis**  
+- **Secure MySQL Data Storage**  
+- **User‑Friendly UI**  
+- **Visual Dashboards & Analytics**
 
----
 
-## ⚙️ Getting Started
+## Getting Started
 
 ### 1. Clone Repositories
 ```bash
 git clone https://github.com/ghavate-n11/netshield-backend.git backend
 git clone https://github.com/ghavate-n11/Netshild-.git frontend
-````
+
 
 ### 2. Run Backend (Spring Boot)
 
@@ -87,11 +86,11 @@ npm start
   * Frontend UI — [http://localhost:3000](http://localhost:3000)
   * Backend API — [http://localhost:8080](http://localhost:8080)
 
-📌 **Note:** Frontend is currently under active development—UI/UX enhancements in progress.
+**Note:** Frontend is currently under active development—UI/UX enhancements in progress.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 netshield/
@@ -115,7 +114,7 @@ netshield/
 
 ---
 
-## ⚙️ Production Build & Deployment
+##  Production Build & Deployment
 
 1. Build React app:
 
@@ -137,7 +136,7 @@ This bundles both backend and frontend into a single deployable JAR ([github.com
 
 ---
 
-## 🚧 Roadmap & Upcoming Features
+##  Roadmap & Upcoming Features
 
 * 🔐 JWT-based authentication
 * 📱 Mobile-responsive UI
@@ -149,16 +148,16 @@ This bundles both backend and frontend into a single deployable JAR ([github.com
 
 ---
 
-## 🤝 Contributors
+##  Contributors
 
 | Name                 | Role                                |
 | -------------------- | ----------------------------------- |
-| 👨‍💻 Nilesh Ghavate | Full‑Stack Developer (Java + React) |
-| 🎓 Varnan Sir        | Project Guide & Technical Mentor    |
+| Nilesh Ghavate | Full‑Stack Developer (Java + React) |
+| Varnan Sir        | Project Guide & Technical Mentor    |
 
 ---
 
-## 🙋‍♂️ Connect with the Author
+##  Connect with the Author
 
-* 📧 [nileshghavate11@gmail.com](mailto:nileshghavate11@gmail.com)
-* 🔗 [LinkedIn](https://linkedin.com/in/nileshghavate-203b27251)
+* [nileshghavate11@gmail.com](mailto:nileshghavate11@gmail.com)
+*  [LinkedIn](https://linkedin.com/in/nileshghavate-203b27251)

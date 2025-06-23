@@ -144,8 +144,6 @@ This bundles both backend and frontend into a single deployable JAR ([github.com
 * 🧠 AI/ML-powered intrusion detection
 * 🛠 CLI export & rule generation
 * 🔄 Persistent state via localStorage
-* 🔧 Configurable rule sets, user roles
-
 ---
 
 ##  Contributors

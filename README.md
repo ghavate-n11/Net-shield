@@ -1,6 +1,4 @@
-# NetShield
-
-**Network Sniffing & Security Analyzer**
+# NetShield **Network Sniffing & Security Analyzer**
 
 Real-time, web-based network traffic monitoring and security analysis tool built with **Spring Boot**, **React.js**, and **MySQL**.
 

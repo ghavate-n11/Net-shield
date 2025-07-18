@@ -1,3 +1,4 @@
+//Dashboard page coding 
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios'; // Still keeping axios, though not used in simulation yet.
 

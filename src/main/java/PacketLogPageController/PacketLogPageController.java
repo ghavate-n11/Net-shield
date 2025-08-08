@@ -1,3 +1,4 @@
+
 package PacketLogPageController;
 
 import com.netshield.entity.PacketLog;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@Controller
+@Controller //controller
 public class PacketLogPageController {
 
     @Autowired
